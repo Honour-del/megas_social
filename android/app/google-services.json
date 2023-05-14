@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "33638021256",
+    "project_id": "megas-1110a",
+    "storage_bucket": "megas-1110a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33638021256:android:70edc62951f2913b29c73d",
+        "android_client_info": {
+          "package_name": "com.example.megas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33638021256-lhcaelj2pufmplaqof1a2e0rs3aio1vh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhcpET-IF4_E7pl6aRBkGr96yXjDPcRmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "33638021256-lhcaelj2pufmplaqof1a2e0rs3aio1vh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
