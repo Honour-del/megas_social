@@ -58,7 +58,7 @@ class EventCardContent extends ConsumerWidget {
               ElevatedButton.icon(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                   elevation: 1.0,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -87,7 +87,7 @@ class EventCardContent extends ConsumerWidget {
               ),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   shape: RoundedRectangleBorder(

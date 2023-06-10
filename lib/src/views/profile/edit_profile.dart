@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:megas/core/utils/constants/color_to_hex.dart';
+// import 'package:megas/core/utils/constants/color_to_hex.dart';
 import 'package:megas/core/utils/constants/navigator.dart';
 import 'package:megas/core/utils/constants/regex.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
@@ -23,9 +23,9 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   @override
   void initState(){
     super.initState();
-    username.addListener(_done);
-    bio.addListener(_done);
-    website.addListener(_done);
+    // username.addListener(_done);
+    // bio.addListener(_done);
+    // website.addListener(_done);
   }
   // @override
   // void dispose(){
@@ -49,7 +49,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   @override
   Widget build(BuildContext context) {
     String? uid = ref.watch(authProviderK).value?.uid;
-    final previous = ref.watch(profileControllerProvider(uid!));
+    final previous = ref.watch(getProfile(uid!));
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -66,7 +66,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
           toolbarHeight: 70,////80
           backgroundColor: Colors.transparent,
           elevation: 0.0,
-          iconTheme: IconThemeData(color: primary_color),
+          // iconTheme: IconThemeData(color: primary_color),
             flexibleSpace: Center(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -80,12 +80,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                     SizedBox(width: getProportionateScreenWidth(80),),
                     Text(
                       "Edit Profile",
-                      style: const TextStyle(
-                          fontSize: 18,
-                          // fontFamily: "MISTRAL",
-                          // fontWeight: FontWeight.w500,
-                          color: Colors.black
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
 
                     SizedBox(width: getProportionateScreenWidth(50),),
@@ -124,14 +119,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                           popcontext(context);
                         }
                       },
-                      child: const Text('Done',style: TextStyle(color: Colors.black),),
+                      child: Text('Done',style: TextStyle(color: Theme.of(context).primaryColorDark),),
                     ) : const SizedBox.shrink(),
-                    // IconButton(onPressed: (){
-                    //   // push(context, MakePost());
-                    // }, icon: FaIcon(Icons.send, color: primary_color)),
-                    // SizedBox(width: 5),
-                    // IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.magnifyingGlass, color: primary_color)),
-                    // SizedBox(width: getProportionateScreenWidth(12),),
                   ],
                 ),
               ),
@@ -147,9 +136,10 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   key: _key,
                   child: previous.when(data: (data)=>Column(
                     children: [
-                      const Align(
+                      Align(
                         alignment: Alignment.topCenter,
                         child: CircleAvatar(
+                          backgroundImage: NetworkImage(data.avatarUrl),
                           radius: 70,
                         ),
                       ),
@@ -158,7 +148,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                         alignment: Alignment.topCenter,
                         child: Text('Change Profile Picture',
                           style: TextStyle(
-                            color: primary_color,
+                            color: Theme.of(context).focusColor,
                             fontSize: 18,
                           ),
                         ),
@@ -198,6 +188,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                         validator: (value){
                           if(bio.text.length  != -1)
                             return null;
+                          return null;
                         },
                         onChanged: (value){
                           if(bio.text.isNotEmpty) {
@@ -219,8 +210,5 @@ class _EditProfileState extends ConsumerState<EditProfile> {
       ),
     );
   }
-
-  // bool isValid = (username.text.isEmpty || website.text.isEmpty || bio.text.isEmpty);
-
 }
 

@@ -8,7 +8,6 @@ import 'package:megas/src/services/comments/comment_impl.dart';
 
 
 final commentServiceProvider = Provider<CommentsRepo>((ref) {
-  // Client client = Client();
   return CommentsRepo();
 });
 
@@ -16,10 +15,7 @@ final commentServiceProvider = Provider<CommentsRepo>((ref) {
 /// [Comment type]
 enum cType{Picture, Video, Text}
 abstract class CommentsRepo {
-  // final Dio? client;
-
-  // CommentsRepo([this.client]);
-factory CommentsRepo () => FakeCommentsRepo();
+factory CommentsRepo () => CommentsRepoImpl();
 
   /*
   All these class id's are commented out because
@@ -41,7 +37,7 @@ factory CommentsRepo () => FakeCommentsRepo();
     required String photoUrl,
   });
 
-  Future<List<CommentModel>> getComments({postId});
+  Stream<List<CommentModel>> getComments({postId});
 
   Future<bool> deleteComments({required String userId, required String commentId});
 }

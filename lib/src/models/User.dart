@@ -1,9 +1,4 @@
-// import 'package:objectbox/objectbox.dart';
-// import 'objectbox_user.g.dart';
-
-// @Entity()
 class UserModel {
-  // @Id()
   int localId;
   final String id;
   final String username;
@@ -14,7 +9,9 @@ class UserModel {
   final List<dynamic> followersCount;
   final List<dynamic> followingCount;
   final List<dynamic> postsCount;
-  final String createdAt;
+  final createdAt;
+  final fcm_token;
+
   UserModel({
     this.localId =0,
     required this.id,
@@ -27,6 +24,7 @@ class UserModel {
     required this.followingCount,
     required this.postsCount,
     required this.createdAt,
+    this.fcm_token,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +39,7 @@ class UserModel {
       followingCount: json['following_count'],
       postsCount: json['posts_count'],
       createdAt: json['created_at'],
+      fcm_token: json['fcm_token'] ?? '',
     );
   }
 
@@ -55,21 +54,8 @@ class UserModel {
     data['followers_count'] = followersCount;
     data['following_count'] = followingCount;
     data['posts_count'] = postsCount;
+    // data['fcm_token'] = fcm_token;
     // data['created_at'] = createdAt;
     return data;
   }
-
-  // Future<UserModel> getProf() async{
-  //     final data = await rootBundle.loadString('assets/mock_json_datum/profile.json');
-  //     final okay = await geFromJson(data);
-  //     return okay;
-  // }
-  //
-  //
-  // UserModel geFromJson(dynamic json){///Json
-  //   Map<String, dynamic> data = jsonDecode(json);
-  //
-  //   return UserModel.fromJson(data);
-  //   //// use this to get json data
-  // }
 }

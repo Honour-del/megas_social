@@ -2,13 +2,8 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/src/models/catalog.dart';
-import '../services/auth/auths_impl.dart';
 import '../services/catalog/interface.dart';
 
-
-// final catalogProvider =
-// StateNotifierProvider<CatalogController, AsyncValue<List<CatalogModel>>>(
-//         (ref) => CatalogController(ref));
 
 final catalogProvider =
 StateNotifierProvider.autoDispose.family<CatalogController, AsyncValue<List<CatalogModel>>, String>((ref, id) {
@@ -23,7 +18,6 @@ class CatalogController extends StateNotifier<AsyncValue<List<CatalogModel>>>{
     getCatalog();
   }
 
-  // String? get  uidk => ref!.watch(authProviderK).value?.uid;
 
   Future<void> createCatalog({
     required CatalogModel catalogModel

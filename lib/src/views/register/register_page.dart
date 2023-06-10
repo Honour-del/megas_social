@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/core/utils/constants/color_to_hex.dart';
-import 'package:megas/core/utils/constants/consts.dart';
 import 'package:megas/core/utils/constants/general_provider.dart';
 import 'package:megas/core/utils/constants/navigator.dart';
 import 'package:megas/core/utils/constants/regex.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
 import 'package:megas/core/utils/custom_widgets/buttons.dart';
 import 'package:megas/core/utils/custom_widgets/text_fields.dart';
-import 'package:megas/src/controllers/auth.dart';
 import 'package:megas/src/services/shared_prefernces.dart';
-// import 'package:megas/src/views/home/navigation.dart';
 import 'package:megas/src/views/login/login_page.dart';
 import 'package:megas/src/views/register/components/take_selfie/take_selfie.dart';
-// import 'package:megas/src/views/register/components/otp_page.dart';
+
 
 
 class Register extends ConsumerStatefulWidget {
@@ -112,7 +109,7 @@ class _RegisterState extends ConsumerState<Register> {
                 const SizedBox(height: 50,),
                 if(isLoading)
                   kProgressIndicator,
-                FlatButton(onTap: (){
+                FlatButtonCustom(onTap: (){
                   registerAction();
                   // push(context, Nav());
                 } /// go to selfie page TakeSelfie()
@@ -162,62 +159,16 @@ class _RegisterState extends ConsumerState<Register> {
       ref
           .read(loadingProvider.notifier)
           .state = true;
-      final auth = await ref.read(authControllerProvider.notifier);
-      username = name.text.split('').first;
-      final response = await auth.register(email: email.text,
-          password: password.text,
-          name: username!,);
-      //// after login function is completed
-      response.fold((e) {
-        //// if error is detected loading will stop and this task will come to live
-        setState(() {
-          isLoading = false;
-        });
-        ref
-            .read(loadingProvider.notifier)
-            .state = false;
-        showSnackBar(context, text: 'Error: $e');
-        debugPrint('Error: $e');
-      }, (status) async {
-          setState(() {
-            isLoading = false;
-          });
-          ref
-              .read(loadingProvider.notifier)
-              .state = false;
-          showSnackBar(
-              context, text: "Sign Up successful!");
-          // Navigator.of(context)
-          //     .pushAndRemoveUntil(MaterialPageRoute(
-          //     builder: (context)
-          //     => const Login()), (route) => false);
-          Navigator.of(context) //TODO
+          Navigator.of(context)
               .pushAndRemoveUntil(MaterialPageRoute(
               builder: (context)
-              => TakeSelfie()), (route) => false);
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) =>
-          //           OtpVerification(
-          //             fullName: name!.text,
-          //             phoneNumber: 'Edit profile to update phoneNumber',
-          //             email: email!.text,
-          //             password: password!.text,
-          //           )
-          //   ),
-          // );
-        // else {
-        //   setState(() {
-        //     isLoading = false;
-        //   });
-        //   ref
-        //       .read(loadingProvider.notifier)
-        //       .state = false;
-        //   showSnackBar(
-        //       context, text: "Sign Up unsuccessful!");
-        // }
+              => TakeSelfie(name: name.text, email: email.text, password: password.text,)), (route) => false);
+      setState(() {
+        isLoading = false;
       });
+      ref
+          .read(loadingProvider.notifier)
+          .state = false;
     }
   }
 }

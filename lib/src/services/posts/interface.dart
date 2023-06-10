@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:megas/src/models/post.dart';
 import 'package:megas/src/services/posts/posts_impl.dart';
 
 final createpostServiceProvider = Provider((ref) {

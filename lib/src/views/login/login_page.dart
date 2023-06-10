@@ -126,7 +126,7 @@ class _LoginState extends ConsumerState<Login> {
                 const SizedBox(height: 50,),
                 if(isLoading)
                   kProgressIndicator,
-                FlatButton(onTap: (){
+                FlatButtonCustom(onTap: (){
                   loginAction();
                 }, label: "Login"),
 

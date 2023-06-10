@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 //   }
 //}
 
+String server_key = 'AAAAB9T7eIg:APA91bFotrIsyxoJzFzTzmpX_L_o1Agl2h9Dm4Yu-vFwNup_xfSWbAclV4STkCzNgJkx5w9Od27krolfmfVRtYKhH2qIObb-NW9xwCNorDAlJQHOQKtKxHpmj5YZUPaWV98Ks08zIgqy';
 ///gets the proportionate height in relation to the screen height
 double getProportionateScreenHeight(double inputHeight) {
   double height = inputHeight.h;

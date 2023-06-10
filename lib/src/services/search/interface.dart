@@ -11,5 +11,6 @@ abstract class Search {
   factory Search() => SearchImpl();
   Future<List<UserModel>> getAllUsers(String searchedText);
 
+  Stream<List<UserModel>> searchUser(String query);
   Future<List<PostModel>> getTrendingPosts();
 }

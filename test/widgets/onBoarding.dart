@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:megas/src/views/home/feed_screen/customs/feeds.dart';
 import 'package:megas/src/views/onBoarding/onBoardings.dart';
 
 

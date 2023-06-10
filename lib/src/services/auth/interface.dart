@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/src/services/auth/auths_impl.dart';
 
@@ -14,7 +15,7 @@ abstract class AuthService {
   Future register(
       {required String email,
         required String name,
-        // required String role,
+        required  url,
         required String password,
       });
 
@@ -32,12 +33,18 @@ abstract class AuthService {
   Future<Map<String, dynamic>?> forgetPassword(String email);
 
   Future<bool?> resetPassword(
-      {String? otp, String? password, String? password2});
+      {String? email, String? password, String? password2});
 
 
   Future getUserInfo(String email);
 
   Future confirmOTP(String? otp);
+
+  Future resendVerificationEmail(User user);
+
+  Future<bool> verificationCheck(User user);
+
+  Future<bool> checkVerification(User user);
 
   Future<bool?> resendOTP(String phoneNumber);
 

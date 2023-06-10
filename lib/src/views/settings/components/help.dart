@@ -64,7 +64,7 @@ class Help extends StatelessWidget {
   launchSupportEmail() async {
     final url = Uri(
         scheme: 'mailto',
-        path: 'support@numbers.ng',
+        path: 'basharsherifdeen@gmail.com',
         // queryParameters: {'subject': 'Example'}
     );
     if (await canLaunchUrl(url)) {

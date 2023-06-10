@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:megas/core/utils/constants/color_to_hex.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
-import 'package:megas/core/utils/custom_widgets/app_bar.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../core/utils/constants/navigator.dart';
 
 class InviteFriends extends StatelessWidget {
@@ -13,7 +12,6 @@ class InviteFriends extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: appBar(context, 'Invite\n Friends & Opps', false, true ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 70,////80
@@ -34,21 +32,40 @@ class InviteFriends extends StatelessWidget {
               children: [
                 IconButton(onPressed: (){popcontext(context);}, icon: FaIcon(FontAwesomeIcons.arrowLeft, color: primary_color)),
                 SizedBox(width: getProportionateScreenWidth(58),),
-                Text(
-                  "Invite\n Friends & Opps",
+                RichText(
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      // fontFamily: "MISTRAL",
-                      // fontWeight: FontWeight.w500,
-                      color: Colors.black
+                  text: TextSpan(
+                    text: "Invite\n Friends & Opps",
+                    style: const TextStyle(
+                        fontSize: 18,
+                        // fontFamily: "MISTRAL",
+                        // fontWeight: FontWeight.w500,
+                        color: Colors.black
+                    ),
+                    children: [
+                      WidgetSpan(child: Padding(
+                        padding: EdgeInsets.only(top: 0),
+                        child: Image.asset(
+                            'assets/images/smiley.png'
+                        ),
+                      )),
+                    ],
                   ),
                 ),
 
+                // Text(
+                //   "Invite\n Friends & Opps",
+                //   textAlign: TextAlign.center,
+                //   style: const TextStyle(
+                //       fontSize: 18,
+                //       // fontFamily: "MISTRAL",
+                //       // fontWeight: FontWeight.w500,
+                //       color: Colors.black
+                //   ),
+                // ),
+
                 SizedBox(width: getProportionateScreenWidth(58),),
-                InkWell(
-                    onTap: (){},
-                    child: IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.magnifyingGlass, color: primary_color))),
+                SizedBox.shrink()
                 // SizedBox(width: getProportionateScreenWidth(12),),
               ],
             ),
@@ -64,39 +81,18 @@ class InviteFriends extends StatelessWidget {
                 height: getProportionateScreenHeight(93),
               )),
           InkWell(
-            onTap: launchSupportEmail,
+            onTap: (){
+              String appLink = 'https://';
+              String message = 'Check out this awesome app! $appLink';
+              Share.share(message);
+            },
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: getProportionateScreenWidth(35.0)),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(),
-                    ),
-                    child: Image.asset(
-                      "assets/images/help.png",
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(width: getProportionateScreenWidth(21)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Contact Us",
-                          style: TextStyle(fontSize: getFontSize(18))),
-                      Text(
-                        "Questions? Need help?",
-                        style: TextStyle(
-                            fontSize: getFontSize(18),
-                            color: tertiary_color,
-                            decoration: TextDecoration.underline),
-                      ),
-                    ],
-                  ),
-                ],
+              child: Center(
+                child: Text(
+                  'Invite your friends & opps'
+                ),
               ),
             ),
           ),

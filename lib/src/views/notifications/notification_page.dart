@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:megas/app_main.dart';
 import 'package:megas/core/utils/constants/regex.dart';
 import 'package:megas/core/utils/custom_widgets/app_bar.dart';
-// import 'package:megas/src/controllers/notification.dart';
 import 'package:megas/src/services/notification/notification_impl.dart';
 import 'package:megas/src/views/notifications/components/notification_card.dart';
 import 'package:megas/src/views/settings/header_widget.dart';
-
 
 
 enum myEnum{New, Old}
@@ -24,50 +21,42 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     // final notification = ref.watch(notificationProvider);
-    final notificationStream = ref.watch(streamNotification.stream);
+    final notificationStream = ref.watch(streamNotification);
     return Scaffold(
       appBar: appBar(context, "Notifications", false, false),
       body: RefreshIndicator(
         onRefresh: ()async{
-          await ref.refresh(streamNotification.stream);
+          await ref.refresh(streamNotification);
         },
-        child: StreamBuilder(
-          stream: notificationStream,
-            builder: (context, snapshot){
-            if(!snapshot.hasData){
-              return kProgressIndicator;
-            }if(snapshot.data!.isEmpty){
-              print("pushing empty notification");
-              KNotificationController.createNewNotification(
-                title: "element.name",
-                body: "element.body",
-                bigPicture: "element.avatarUrl",
-              );
-              print("pushed empty notification");
-              return Center(child: Text('No notifications yet'),);
-            }
-            final now = DateTime.now();
-            final newNotifications = snapshot.data?.where((n) => now.difference(n.timeAt).inHours <= 24).toList();
-            final oldNotifications = snapshot.data?.where((n) => now.difference(n.timeAt).inHours > 24).toList();
-            snapshot.data?.forEach((element) {
-              KNotificationController.createNewNotification(
-                title: element.name,
-                body: element.body,
-                bigPicture: element.avatarUrl,
-              );
-              print("pushing notification");
-            });
-            print("notification pushed");
-            return Column(
-              children: [
-                HeaderWidget('New'),
-                ...newNotifications!.map((e) => NotificationCard(note: e,)).toList(),
-
-                HeaderWidget('Old'),
-                ...oldNotifications!.map((e) => NotificationCard(note: e,)).toList(),
-              ],
+        child: notificationStream.when(data: (snapshot){
+          if(snapshot.isEmpty){
+            return Center(
+              child: Text(
+                'No notification'
+              ),
             );
           }
+          final now = DateTime.now();
+          // int differentInHours = dif
+          final newNotifications = snapshot.where((n) => now.difference(n.timeAt.toDate()).inHours <= 24).toList();
+          final oldNotifications = snapshot.where((n) => now.difference(n.timeAt.toDate()).inHours > 24).toList();
+          print("notification pushed");
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                HeaderWidget('New'),
+                ...newNotifications.map((e) => NotificationCard(note: e,)).toList(),
+
+                if(oldNotifications.isNotEmpty)
+                  HeaderWidget('Old'),
+                ...oldNotifications.map((e) => NotificationCard(note: e,)).toList(),
+              ],
+            ),
+          );
+        },
+            error: (e,_) => throw e,
+            loading: ()=> kProgressIndicator,
         ),
       ),
     );

@@ -10,7 +10,7 @@ class Header extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String eventTitle = ref.watch(eventTitleProvider.state).state;
+    String eventTitle = ref.watch(eventTitleProvider.notifier).state;
     return Container(
       height: MediaQuery.of(context).size.height -
           MediaQuery.of(context).size.height / 1.4,

@@ -3,14 +3,18 @@ import 'package:face_camera/face_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/core/utils/constants/consts.dart';
+import 'package:megas/core/utils/constants/general_provider.dart';
 import 'package:megas/core/utils/constants/regex.dart';
+import 'package:megas/core/utils/custom_widgets/buttons.dart';
 import 'package:megas/src/controllers/auth.dart';
-import 'package:megas/src/services/auth/auths_impl.dart';
 import 'package:megas/src/views/home/navigation.dart';
 
 
 class CaptureImage extends ConsumerStatefulWidget {
-  const CaptureImage({Key? key}) : super(key: key);
+  final String name;
+  final String email;
+  final String password;
+  const CaptureImage({Key? key, required this.name, required this.email, required this.password}) : super(key: key);
 
   @override
   ConsumerState<CaptureImage> createState() => _CaptureImageState();
@@ -19,6 +23,7 @@ class CaptureImage extends ConsumerStatefulWidget {
 class _CaptureImageState extends ConsumerState<CaptureImage> {
   File? _capturedImage;
   bool loading = false;
+  String username = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,39 +41,34 @@ class _CaptureImageState extends ConsumerState<CaptureImage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                        onPressed: () => setState(() {
+                    FlatButtonCustom(
+                        onTap: () => setState(() {
                           _capturedImage = null;
                         }),
-                        child: Text(
-                          'Capture again',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700
-                          ),
-                        ),
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        label: 'Capture again',
                     ),
-
-                    ElevatedButton(
-                      onPressed: () {
+                    // TODO
+                    FlatButtonCustom(
+                      onTap: () {
+                        ref
+                            .read(loadingProvider.notifier)
+                            .state = true;
                         setState(() {
                           loading = true;
                         });
-                        uploadImage();
+                        signUpandUploadImage();
                         setState(() {
                           loading = false;
                         });
+                        ref
+                            .read(loadingProvider.notifier)
+                            .state = false;
                         showSnackBar(context, text: 'Profile pic successfully uploaded');
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                            builder: (context) => Nav()), (route) => false);
+
                       },
-                      child: Text(
-                          'Upload',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700
-                        ),
-                      ),
+                      label: 'Upload',
+                      width: MediaQuery.of(context).size.width * 0.35,
                     ),
                   ],
                 ),
@@ -99,11 +99,47 @@ class _CaptureImageState extends ConsumerState<CaptureImage> {
   }
 
 
-  void uploadImage() async{
-    final uid = ref.watch(authProviderK);
-    await ref.read(authControllerProvider).uploadProfilePic(url: _capturedImage!,
-      uid: uid,
+  void signUpandUploadImage() async{
+    ref
+        .read(loadingProvider.notifier)
+        .state = true;
+    final auth = await ref.read(authControllerProvider.notifier);
+    username = widget.name.split('').first;
+    // username = widget.name.split('').first;
+    // final _file = await compressImage(file);
+    final response = await auth.register(email: widget.email,
+      password: widget. password,
+      name: widget.name,
+      photoUrl: _capturedImage!
     );
+    //// after login function is completed
+    // final uid = ref.watch(authProviderK);
+    // await ref.read(authControllerProvider).uploadProfilePic(url: _capturedImage!,
+    //   uid: uid,
+    // );
+    response.fold((e) {
+      //// if error is detected loading will stop and this task will come to live
+      setState(() {
+        loading = false;
+      });
+      ref
+          .read(loadingProvider.notifier)
+          .state = false;
+      showSnackBar(context, text: 'Error: $e');
+      debugPrint('Error: $e');
+    }, (status) async {
+      setState(() {
+        loading = false;
+      });
+      ref
+          .read(loadingProvider.notifier)
+          .state = false;
+      showSnackBar(
+          context, text: "Sign Up successful!");
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          builder: (context) => Nav()), (route) => false);
+
+    });
   }
 
   Widget _message(String msg) => Padding(

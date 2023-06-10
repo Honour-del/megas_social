@@ -1,5 +1,6 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:megas/src/models/post.dart';
+
 
 
 
@@ -9,7 +10,7 @@ class NotificationModel {
     required this.body,
     required this.postId,
     required this.type,
-    required this.followerId,
+    this.followerId,
     required this.timeAt,
     required this.isRead,
     required this.name,
@@ -18,9 +19,9 @@ class NotificationModel {
   late final String notificationId;
   late final String body;
   late final String postId;
-  late final Type type;
-  late final String followerId;
-  late final DateTime timeAt;
+  late final type;
+  String? followerId;
+  late final Timestamp timeAt;
   late final bool isRead;
   late final PostModel model;
   late final String name;
@@ -31,7 +32,7 @@ class NotificationModel {
     body = json['body'] ?? '';
     postId = json['post_id'] ?? '';
     type = json['_type'] ?? '';
-    followerId = json['follower_id'];
+    followerId = json['follower_id'] ?? '';
     timeAt = json['time_at'] ?? '';
     isRead = json['isRead'] ?? '';
     name = json['name'] ?? '';

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:megas/core/utils/constants/color_to_hex.dart';
-import 'package:megas/src/views/chat/chat_screen/chat_page.dart';
+import 'package:megas/src/views/chat/widgets/contacts_list.dart';
+
 import 'package:megas/src/views/home/feed_screen/feed_page.dart';
 import 'package:megas/src/views/notifications/notification_page.dart';
 import 'package:megas/src/views/settings/settings_page.dart';
@@ -19,6 +20,7 @@ class Nav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return PersistentBottomBarScaffold(
       items: [
         PersistentTabItem(
@@ -34,7 +36,8 @@ class Nav extends StatelessWidget {
           navigatorkey: _tab2navigatorKey,
         ),
         PersistentTabItem(
-          tab: ChatPage(),
+          tab: ContactsList(), // ChatPage()
+          // tab: ChatPage(), // ContactsList()
           icon: Icons.person,
           title: '',
           navigatorkey: _tab3navigatorKey,
@@ -73,7 +76,8 @@ class _PersistentBottomBarScaffoldState extends ConsumerState<PersistentBottomBa
   final List<Widget> screens = [
     FeedPage(),
     NotificationPage(),
-    ChatPage(),
+    // ChatPage(),
+    ContactsList(),
     SettingsPage(),
   ];
 
@@ -189,8 +193,8 @@ class _PersistentBottomBarScaffoldState extends ConsumerState<PersistentBottomBa
                       ref.read(currentTabProvider.notifier).state = 3;
                     },
                     child: _selectedTab == 3 ?
-                    const FaIcon(FontAwesomeIcons.tools, size: 30, color: Colors.white,) :
-                    const FaIcon(FontAwesomeIcons.tools, size: 25, color: Colors.white54,),
+                    const FaIcon(FontAwesomeIcons.screwdriverWrench, size: 30, color: Colors.white,) :
+                    const FaIcon(FontAwesomeIcons.screwdriverWrench, size: 25, color: Colors.white54,),
                   ),
                 ],
                 controller: _tabController,
@@ -321,7 +325,7 @@ class OverlayBuilderState extends State<OverlayBuilder> {
   }
 
   void addToOverlay(OverlayEntry entry) async {
-    Overlay.of(context)!.insert(entry);
+    Overlay.of(context).insert(entry);
   }
 
   void hideOverlay() {

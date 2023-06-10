@@ -177,7 +177,7 @@ class _OtpVerificationState extends ConsumerState<OtpVerification> {
                   onTap: () async {
                     // bool status = await auth
                     //.resendOTP(widget.phoneNumber.validPhoneNumber);
-                    ref.read(loadingProvider.state).state = true;
+                    ref.read(loadingProvider.notifier).state = true;
                     setState(() {
                       isapicallprocess2 = true;
                     });
@@ -185,7 +185,7 @@ class _OtpVerificationState extends ConsumerState<OtpVerification> {
                       name: widget.fullName!,
                       // role: widget.role,
                       email: widget.email!,
-                      password: widget.password!,
+                      password: widget.password!, photoUrl: '',
                       // password2: widget.password2!,
                       // phoneNumber: widget.phoneNumber!,
                       // fcmToken: "NO DATA", photoUrl: '',
@@ -217,15 +217,15 @@ class _OtpVerificationState extends ConsumerState<OtpVerification> {
               ),
               if(isapicallprocess)
                 // kProgressIndicator,
-              FlatButton(
+                FlatButtonCustom(
                 label: 'Verify',
                 onTap: () async {
                   setState(() {
                     isapicallprocess = true;
                   });
-                  ref.read(loadingProvider.state).state = true;
+                  ref.read(loadingProvider.notifier).state = true;
                   final response = await auth.confirmOTP(otp);
-                  ref.read(loadingProvider.state).state = false;
+                  ref.read(loadingProvider.notifier).state = false;
                   setState(() {
                     isapicallprocess = false;
                   });
@@ -234,7 +234,7 @@ class _OtpVerificationState extends ConsumerState<OtpVerification> {
                       isapicallprocess = false;
                     });
                     ref
-                        .read(loadingProvider.state)
+                        .read(loadingProvider.notifier)
                         .state = false;
                     showSnackBar(context, text: e.toString());
                     debugPrint('Error : ${e.toString()}');
@@ -280,7 +280,7 @@ class _OtpVerificationState extends ConsumerState<OtpVerification> {
                                   ),
                                   Stack(
                                     children: [
-                                      FlatButton(
+                                      FlatButtonCustom(
                                         // label: 'SIGN UP',
                                         label: "Let's go",
                                         onTap: () {

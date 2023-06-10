@@ -1,22 +1,14 @@
 
 
-// import 'package:dio/src/dio.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:megas/core/references/firestore.dart';
 import 'package:megas/core/utils/constants/uuid.dart';
 import 'package:megas/main.dart';
 import 'package:megas/src/models/comments.dart';
-// import 'package:megas/src/services/shared_prefernces.dart';
 
 import 'comment_interface.dart';
 
-class FakeCommentsRepo implements CommentsRepo{
-  // final Dio? client;
-  // FakeCommentsRepo([this.client]);
-  // GetId getId = GetId(); /* get saved currentUser id */
-  // User? user = FirebaseAuth.instance.currentUser;
+class CommentsRepoImpl implements CommentsRepo{
   @override
   Future<void> addComment({required String postId,
     required String commenterUserId,
@@ -40,17 +32,18 @@ class FakeCommentsRepo implements CommentsRepo{
       _data['avatar_url'] = photoUrl;
       return _data;
     }
-    await postsRef.doc(postId).collection('comments').doc(commentId).set(toJson());
-    // commentsRef.doc(postId).set(toJson());
-    // return comments;
+    await commentsRef.doc(commentId).set(toJson());
+    await postsRef.doc(postId).update({
+      'comments': FieldValue.arrayUnion([commenterUserId]),
+      'commentCounts': FieldValue.increment(1)
+    });
   }
 
   @override
   Future<bool> deleteComments({required String userId, required String commentId}) async{
     // TODO: implement deleteComments
     try{
-      // currentUid = _preferences.getToken() as String;
-      if(userId != '' )
+      // if(userId != '' )
       await commentsRef.doc(commentId).delete();
     } catch (e) {
       throw e;
@@ -59,23 +52,11 @@ class FakeCommentsRepo implements CommentsRepo{
   }
 
 
-  /* get all "Users" posts back from database */
-  Stream<QuerySnapshot> getComment(postId) {
-    // currentUid = _preferences.getToken() as String;
-    // FirebaseAuth.instance.currentUser!.uid
-    /* Return a stream of comments for the current post */
-    return postsRef.doc(postId).collection('comments').orderBy('comment_created_at').snapshots();
-  }
   @override
-  Future<List<CommentModel>> getComments({postId}) async{
+  Stream<List<CommentModel>> getComments({postId}) {
     // TODO: implement getComments
-    try{
-      dynamic data = await getComments(postId: postId);
-      final result = CommentModel.fromJson(data) as List<CommentModel>;
-      return result;
-    } catch(e){
-      throw e;
-    }
+    return commentsRef.where('post_id', isEqualTo: postId).orderBy('comment_created_at', descending: true).snapshots()
+        .map((event) => event.docs.map((e) => CommentModel.fromJson(e.data())
+    ).toList());
   }
-
 }

@@ -6,7 +6,6 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:megas/core/utils/custom_widgets/buttons.dart';
@@ -49,7 +48,7 @@ void main() {
     expect(find.byType(Image, skipOffstage: false), findsOneWidget);
     expect(find.byType(GestureDetector, skipOffstage: false), findsWidgets);
     expect(find.byType(UnderlineField, skipOffstage: false), findsWidgets);
-    expect(find.byType(FlatButton, skipOffstage: false), findsOneWidget);
+    expect(find.byType(FlatButtonCustom, skipOffstage: false), findsOneWidget);
     expect(find.byType(TextButton, skipOffstage: false), findsOneWidget);
 
     // await tester.tap(find.byIcon(Icons.menu));

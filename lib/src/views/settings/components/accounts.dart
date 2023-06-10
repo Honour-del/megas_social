@@ -3,10 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:megas/core/utils/constants/color_to_hex.dart';
 import 'package:megas/core/utils/constants/navigator.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
-import 'package:megas/core/utils/custom_widgets/app_bar.dart';
 import 'package:megas/core/utils/custom_widgets/list_tiles.dart';
 import 'package:megas/src/views/settings/components/account_compos/account_information.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'account_compos/change_password.dart';
 
@@ -53,10 +51,8 @@ class _AccountsState extends State<Accounts> {
                   ),
                 ),
 
-                SizedBox(width: getProportionateScreenWidth(58),),
-                InkWell(
-                    onTap: (){},
-                    child: IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.magnifyingGlass, color: primary_color))),
+                SizedBox(width: getProportionateScreenWidth(75),),
+                SizedBox.shrink()
                 // SizedBox(width: getProportionateScreenWidth(12),),
               ],
             ),
@@ -73,7 +69,7 @@ class _AccountsState extends State<Accounts> {
               subtitle: "Check and edit your account information",
               onTap: (){
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                popcontext(context);
+                // popcontext(context);
                 push(context, Account());
               });
             }, trailing: const Icon(Icons.arrow_forward_ios_rounded),),

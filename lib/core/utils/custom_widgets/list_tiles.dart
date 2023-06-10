@@ -12,10 +12,10 @@ class Tiles extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: ListTile(
-        title: Text(title, style: const TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w700),),
+        title: Text(title, style: Theme.of(context).textTheme.bodyMedium),
         leading: leading,
         trailing: trailing,
-        subtitle: Text(subtitle!, style: const TextStyle(color: Colors.black54, fontSize: 13, fontWeight: FontWeight.w100),),
+        subtitle: Text(subtitle!, style: Theme.of(context).textTheme.bodySmall),
         onTap: onTap,
       ),
     );

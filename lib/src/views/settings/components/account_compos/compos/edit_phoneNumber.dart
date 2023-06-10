@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:megas/core/utils/constants/consts.dart';
 import 'package:megas/core/utils/custom_widgets/app_bar.dart';
 import 'package:megas/core/utils/custom_widgets/buttons.dart';
 
 
 
-class PhoneSetting extends StatefulWidget {
+class PhoneSetting extends ConsumerStatefulWidget {
 
   PhoneSetting({Key? key}) : super(key: key);
   @override
   _PhoneSettState createState() => _PhoneSettState();
 }
 
-class _PhoneSettState extends State<PhoneSetting> {
+class _PhoneSettState extends ConsumerState<PhoneSetting> {
   // Users user;
   bool passwordValid = true;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -30,22 +32,22 @@ class _PhoneSettState extends State<PhoneSetting> {
 
 
   updateProfileData() {
-    // setState(() {
-    //   _newPass.text.trim().length < 3 ||
-    //       _newPass.text.isEmpty
-    //       ? passwordValid = false
-    //       : passwordValid = true;
-    // });
-    //
-    // if (passwordValid) {
-    //   usersReference.doc(widget.currentUserId).update({
-    //     'displayName': _newPass.text,
-    //   });
-    //   print(_newPass.text);
-    //   SnackBar snackbar = SnackBar(content: Text('Profile updated !'));
-    //   // ignore: deprecated_member_use
-    //   _scaffoldKey.currentState.showSnackBar(snackbar);
-    // }
+    setState(() {
+      _newPass.text.trim().length < 3 ||
+          _newPass.text.isEmpty
+          ? passwordValid = false
+          : passwordValid = true;
+    });
+
+    if (passwordValid) {
+      // TODO
+      // usersReference.doc(widget.currentUserId).update({
+      //   'displayName': _newPass.text,
+      // });
+      print(_newPass.text);
+      // ignore: deprecated_member_use
+      showSnackBar(context, text: 'Profile updated!');
+    }
   }
 
   textC(){
@@ -83,25 +85,19 @@ class _PhoneSettState extends State<PhoneSetting> {
   }
 
 
-
-
-
-  //go to forgot password page
-  onPressed(){
-   // Navigator.of(context).push(BouncyPageRoute(widget: ForgetPasswordPage()));
-  }
-
   passReset(){
     return Scaffold(
       key: _scaffoldKey,
-      appBar: appBar(context, 'Change Number', false, true ),
+      appBar: appBar(context, 'Change Number', false, true, widget: SizedBox.shrink() ),
       body: Container(
         child: SingleChildScrollView(child:
         Column(
           children: [
             textC(),
             textN(),
-            FlatButton(onTap: (){}, label: "Update Number"),
+            FlatButtonCustom(onTap: (){
+              updateProfileData();
+            }, label: "Update Number"),
           ],
         )
         ),

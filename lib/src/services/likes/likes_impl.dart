@@ -1,71 +1,86 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/core/references/firestore.dart';
+import 'package:megas/core/utils/constants/consts.dart';
+import 'package:megas/core/utils/constants/uuid.dart';
+import 'package:megas/main.dart';
+import 'package:megas/src/controllers/profile.dart';
 import 'package:megas/src/models/User.dart';
 import 'package:megas/src/models/post.dart';
-import 'package:megas/src/services/likes/interface.dart';
+import 'package:megas/src/services/notification/interface.dart';
+import 'package:megas/src/services/notification/notification_impl.dart';
 
-class UpdateLikesImpl implements UpdateLikes{
-  @override
-  Future<void> addLike({required String postid, required String likerid, bool? liked}) async{
-    // TODO: implement addLike
-    try{
-      final postRef = postsRef.doc();
-      final _likesRef = await postRef;
-      final likeRef = await _likesRef.get();
 
-      List<String> likes = [];
-      if((await postRef.get()).exists){
-        // final documentRef = _likesRef.doc(likerid);
-        // if(!(await documentRef.get()).exists){
-        //   await documentRef.set({});
-          print('snapshot exists');
-          if(liked!){
-            print('hh');
-            likeRef.data()?.forEach((key, value) {
-              likes.add(value);
-            });
-            // likeRef.docs.forEach((element) {
-            //   likes.add(element.id);
-            // });
-            likes.add(likerid);
-            print('liked');
-          }else{
-            // currentLikes.remove(likerid);
-            likes.remove(likerid);
-            print('unliked');
-          // }
+class UpdateLikesImpl{
+  Ref? _ref;
+  UpdateLikesImpl(this._ref);
+  NotificationServiceImpl notify = NotificationServiceImpl();
+
+  // @override
+  Future<void> likePost({required String postid, required String likerid, PostModel? postModel, bool? liked, post_owner_token, post_owner}) async{
+    UserModel? liker = await _ref?.watch(getProfile(likerid)).value;
+    UserModel? owner = await _ref?.watch(getProfile(post_owner)).value;
+    final notified =  await _ref?.read(notificationServiceProviderK);
+    final doc = await postsRef.doc(postid).get();
+    if(doc.exists)
+      print("The reference exists");
+    if(liked!){
+      postsRef.doc(postid).update({
+        'likes': FieldValue.arrayUnion([likerid])
+      });
+      if(liker != null){
+        if(owner != null){
+          print('OwnerToken: ${owner.fcm_token}');
+          notify.sendFcmNotification(
+            title: 'New like notification',
+            body: "${liker.name} liked your post",
+            token: owner.fcm_token,
+          );
+          print('FCM: like notification sent');
+          String notificationId = uuid.v1();
+          Map<String, dynamic> toJson() {
+            var data = <String, dynamic>{};
+            data['notification_id'] = notificationId;
+            data['body'] = handleNotification(TypeN.Likes, liker.username);
+            data['post_id'] = postid;
+            data['_type'] = TypeN.Likes.name;
+            data['time_at'] = dateTime;
+            data['isRead'] = false;
+            data['name'] = liker.name;
+            data['avatar_url'] = liker.avatarUrl;
+            return data;
+          }
+          notified!.sendNotification(toJson: toJson(), userToReceiveNotificationId: owner.id, notificationId: notificationId);
+          print('local notification sent');
         }
-
-        /// Update the like feed in the post document
-        print('postref');
-        // await _likesRef.doc(likerid).set({});
-        // FieldValue.arrayUnion(likerid)
-        await postRef.update({'likes': likes});
-        /// Optionally update the local object to reveal the like
-        // PostModel post = PostModel.fromJson(postRef);
-        // post.likesCount = likes;
-        print('hf');
-      } else {
-        // like the post
-        print('Error: Likes ref does not exist');
+      } else{
+        print('conditions are null');
       }
-    } catch (e){
-      throw e;
+    }else{
+      postsRef.doc(postid).update({
+        'likes': FieldValue.arrayRemove([likerid])
+      });
     }
   }
 
-  @override
-   getLikes({required String postid}) async{
-    // TODO: implement getLikes
+
+
+  // @override
+  Stream<PostModel> getLikes({required String postid}){
+    // TODO: implement addLike
     try{
-      /* return all likes under a post */
-      final doc = await postsRef.doc(postid).get();
-      final likes = doc.data()?['likes'];
-      return likes ?? 0;
+      final postRef = postsRef.doc(postid);
+      final likeRef = postRef.snapshots()
+      .map((event) => PostModel.fromJson(event.data()));
+      return likeRef;
+      // PostModel _post = likeRef.first;
+      // List<String> likes = [];
+      // likes.add(likeRef)
     } catch (e){
       throw e;
     }
   }
 }
+

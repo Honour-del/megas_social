@@ -30,16 +30,13 @@ class PostModel {
   late String? avatarUrl;
 
 
+
   /* The initial error was because of 'late' initializer error  */
   PostModel.fromJson(json) {
-    // Map<String, dynamic> data = json as Map<String, dynamic>;
     /// mapping comments into the post
-    final commentJsons = json['comments'] as List<dynamic>?;
-    // List<CommentModel> comments = [];
-    // if(data.containsKey('comments')){
-    //   comments = List<CommentModel>.from(data['comments'].map((comment) => CommentModel.fromJson(comment)));
-    // }
-    comments = commentJsons?.map((commentJson) => CommentModel.fromJson(commentJson)).toList();
+    // final commentJsons = json['comments'] as List<dynamic>?;
+
+    // comments = commentJsons?.map((commentJson) => CommentModel.fromJson(commentJson)).toList();
 
     postId = json['post_id'] ?? '';
     postImageUrl = json['post_image_url'] ?? '';
@@ -47,8 +44,8 @@ class PostModel {
     userId = json['user_id'] ?? '';
     createdAt = json['posted_at'] ?? Timestamp.now();
     likesCount = json['likes'] ?? [];
-    comments = comments ?? [];
-    commentCounts = comments?.length;
+    comments =  [];
+    commentCounts = json['commentCounts'] ?? [];
     username = json['username'] ?? '';
     name = json['name'] ?? '';
     avatarUrl = json['avatar_url'] ?? '';

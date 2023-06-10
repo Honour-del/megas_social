@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:megas/core/utils/constants/consts.dart';
 import 'package:megas/core/utils/custom_widgets/app_bar.dart';
 import 'package:megas/core/utils/custom_widgets/buttons.dart';
 
 
 
-class EmailSett extends StatefulWidget {
+class EmailSett extends ConsumerStatefulWidget {
 
   EmailSett({Key? key}) : super(key: key);
   @override
   _EmailSettState createState() => _EmailSettState();
 }
 
-class _EmailSettState extends State<EmailSett> {
+class _EmailSettState extends ConsumerState<EmailSett> {
   @override
   void initState() {
     super.initState();
@@ -24,21 +26,20 @@ class _EmailSettState extends State<EmailSett> {
     // TextEditingController _confirmNewPass = TextEditingController();
 
     updateProfileData() {
-      // setState(() {
-      //   _newPass.text.trim().length < 3 ||
-      //       _newPass.text.isEmpty
-      //       ? passwordValid = false
-      //       : passwordValid = true;
-      // });
-      //
-      // if (passwordValid) {
-      //   usersReference.doc(widget.currentUserId).update({
-      //     'displayName': _newPass.text,
-      //   });
-      //   print(_newPass.text);
-      //   SnackBar snackbar = SnackBar(content: Text('Profile updated !'));
-      //   _scaffoldKey.currentState.showSnackBar(snackbar);
-      // }
+      setState(() {
+        _newPass.text.trim().length < 3 ||
+            _newPass.text.isEmpty
+            ? passwordValid = false
+            : passwordValid = true;
+      });
+
+      if (passwordValid) {
+        // usersReference.doc(widget.currentUserId).update({
+        //   'displayName': _newPass.text,
+        // });
+        print(_newPass.text);
+        showSnackBar(context, text: 'Profile updated!');
+      }
     }
 
     textC(){
@@ -82,14 +83,14 @@ class _EmailSettState extends State<EmailSett> {
     passReset(){
       return Scaffold(
         key: _scaffoldKey,
-        appBar: appBar(context, 'Change email', false, true ),
+        appBar: appBar(context, 'Change email', false, true, widget: SizedBox.shrink() ),
         body: Container(
           child: SingleChildScrollView(child:
           Column(
             children: [
               textC(),
               textN(),
-              FlatButton(onTap: (){}, label: "Change email"),
+              FlatButtonCustom(onTap: (){}, label: "Change email"),
             ],
           )
           ),

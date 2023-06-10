@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/core/utils/constants/color_to_hex.dart';
+import 'package:megas/core/utils/constants/consts.dart';
 import 'package:megas/core/utils/constants/navigator.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
-import 'package:megas/core/utils/constants/uuid.dart';
-import 'package:megas/main.dart';
+import 'package:megas/core/utils/custom_widgets/image_preview.dart';
 import 'package:megas/src/controllers/likes.dart';
 import 'package:megas/src/models/User.dart';
-import 'package:megas/src/models/comments.dart';
 import 'package:megas/src/models/post.dart';
 import 'package:megas/src/services/auth/auths_impl.dart';
 import 'package:megas/src/services/notification/notification_impl.dart';
 import 'package:megas/src/views/comments/comment.dart';
-import '../../../../services/likes/interface.dart';
-import '../../../../services/notification/interface.dart';
+import 'package:megas/src/views/profile/profile_page.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 
@@ -33,20 +31,57 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
  // late final NotificationModel model;
   UserModel? currentUser;
   NotificationServiceImpl impl = NotificationServiceImpl();
+  Color _defaultLike_color = Colors.grey;
+  bool isLiked  = false;
+
+  _checkIfLiked(uid) async{
+    final _post  =  await ref.watch(getLikesProvider(widget.post.postId));
+    PostModel? _model = _post.value;
+    if(_model != null)
+      if(_model.likesCount.contains(uid)){
+        if(mounted){
+          setState(() {
+            isLiked = true;
+            _defaultLike_color = primary_color;
+          });
+        }
+      } else{
+        if(mounted){
+          setState(() {
+            isLiked = false;
+            _defaultLike_color = Colors.grey;
+          });
+        }
+      }
+  }
 
 
   @override
   Widget build(BuildContext context) {
-
+    String? uid = ref.watch(authProviderK).value?.uid;
+    _checkIfLiked(uid);
     avatarAndname(){
       return SizedBox(
           child: Row(
             children: [
-              const CircleAvatar(
+             widget.post.avatarUrl!.isNotEmpty  ?
+            GestureDetector(
+              onTap: (){
+                push(context, ProfilePage(userId: widget.post.userId));
+              },
+              child: CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(widget.post.avatarUrl!),
+          ),
+            )
+            :
+            const CircleAvatar(
                 radius: 30,
               ),
-              const SizedBox(width: 3,),
+              const SizedBox(width: 4,),
               Column(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.post.username ?? '',
@@ -80,30 +115,33 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
           // textAlign: TextAlign.left,
           overflow: TextOverflow.ellipsis,
           maxLines: 20,
-          style: TextStyle(
-            fontSize: getFontSize(14),
-            fontWeight: FontWeight.normal,
-            color: Colors.grey[800],
-          ),
+          style: Theme.of(context).textTheme.displaySmall,
         ),
       );
     }
 
     media(){
-      return Container(
-        height: getProportionateScreenHeight(225),
-        decoration: BoxDecoration(
+      return GestureDetector(
+        onTap: (){
+          push(context, ImageViewScreen(
+            imageProviderCategory: ImageProviderCategory.NetworkImage,
+            imagePath: widget.post.postImageUrl,
+          ));
+        },
+        child: Container(
+          height: getProportionateScreenHeight(225),
+          decoration: BoxDecoration(
             // shape: BoxShape.circle,
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)),
-            image: DecorationImage(image: NetworkImage(widget.post.postImageUrl), fit: BoxFit.cover)
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18)),
+              image: DecorationImage(image: NetworkImage(widget.post.postImageUrl), fit: BoxFit.cover)
+          ),
         ),
       );
     }
 
 
-    bool like  = false;
     interactivity({VoidCallback? onTap}){
-      // final isLiked = ref.watch(likesProvider(widget.post.postId));
+
       final userData = ref.watch(userDetailProvider).value;
       return Row(
         children: [
@@ -114,33 +152,15 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
                 IconButton(onPressed: () async{
                   /// this should push to comment page
                   print("ok");
-                  bool isLiked = !widget.post.likesCount.contains(userData?.id);
+                   isLiked = !widget.post.likesCount.contains(userData?.id);
                   print('postId: ${widget.post.postId}');
-                  await ref.read(likesUpdateServicesProvider).addLike(postid: widget.post.postId, likerid: userData!.id, liked: isLiked);
-                  print("ok2");
-                  if(isLiked)
-                    setState(() {
-                      like = isLiked;
-                    });
+                  // likesUpdateServicesProvider
 
-                  final notify = ref.read(notificationServiceProviderK);
-                  //
-                  // String notificationId = uuid.v1();
-                  // Map<String, dynamic> toJson() {
-                  //   var data = <String, dynamic>{};
-                  //   data['notification_id'] = notificationId;
-                  //   data['body'] = impl.handleNotification(Type.Likes, userData.username);
-                  //   data['post_id'] = widget.post.postId;
-                  //   data['_type'] = Type.Likes;
-                  //   data['time_at'] = dateTime;
-                  //   data['isRead'] = false;
-                  //   data['name'] = userData.username;
-                  //   data['avatar_url'] = userData.avatarUrl;
-                  //   return data;
-                  // }
-                  // await notify.sendNotification(toJson: toJson(), userToReceiveNotificationId: widget.post.userId);
-                  print('like notification sent');
-                }, icon: like ? Icon(Icons.thumb_up, color: primary_color,) : Icon(Icons.thumb_up, color: Colors.grey,) ),
+                  await ref.read(likesProvider.notifier).likePost(postid: widget.post.postId,
+                      likerId: userData!.id, liked: isLiked, post_owner: widget.post.userId);
+                  print("ok2");
+                  _checkIfLiked(uid);
+                }, icon: Icon(Icons.thumb_up, color: _defaultLike_color,)),
                 const SizedBox(width: 6.5,),
                 Text(widget.post.likesCount.length.toString()),
               ],
@@ -155,7 +175,9 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
                   push(context, Comments(
                     post: PostModel(postId: widget.post.postId,
                         postImageUrl: widget.post.postImageUrl, caption: widget.post.caption,
-                        comments: [], createdAt: widget.post.createdAt, likesCount: []),
+                        comments: widget.post.comments, createdAt: widget.post.createdAt, likesCount: [],
+                      userId: widget.post.userId,
+                    ),
                   ));
                 }, icon: const Icon(Icons.comment, color: Colors.grey,)),
                 const SizedBox(width: 6.5,),
@@ -180,7 +202,6 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
       );
     }
     return SizedBox(
-      // height: getProportionateScreenHeight(430), ///
       child: Padding(
         padding: EdgeInsets.only(top: 12, bottom: 14, left: getProportionateScreenWidth(20), right: getProportionateScreenWidth(10)),
         child: SingleChildScrollView(
@@ -191,7 +212,7 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
               color: Colors.transparent,
               borderRadius: BorderRadius.all(Radius.circular(10)),
               border: Border.all(
-                color: primary_color,
+                color: Theme.of(context).cardColor,
                 width: 2,
               )
             ),
@@ -201,16 +222,16 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
               maxWidth: double.infinity,
             ),
             child: Padding(
-              padding: EdgeInsets.only(top: 12, bottom: 12, left: getProportionateScreenWidth(15), right: getProportionateScreenWidth(7)),
+              padding: EdgeInsets.only(top: 12, bottom: 5, left: getProportionateScreenWidth(15), right: getProportionateScreenWidth(7)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   avatarAndname(), // name and avatar of post author
                   const SizedBox(height: 20,),
                   text(), /// string content of the post
-                  const SizedBox(height: 15,),
+                  const SizedBox(height: 3,),
                   widget.post.postImageUrl.isNotEmpty ? media() : SizedBox.shrink(), /// photos or videos
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 2,),
                   interactivity(onTap: (){}), /// likes,comments count
                 ],
               ),
@@ -220,4 +241,5 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
       ),
     );
   }
+
 }

@@ -1,92 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:megas/core/utils/constants/color_to_hex.dart';
+import 'package:megas/core/utils/constants/size_config.dart';
+// import 'package:megas/src/services/shared_prefernces.dart';
 
-// import '../main_complete.dart';
 
-enum Themes { Light, Dark }
 
-class ThemesController {
-  static final appThemeData = {
-    Themes.Light: ThemeData(
-      brightness: Brightness.light,
-
-      // primaryColor: App.mainColor,
-      // ignore: deprecated_member_use
-      accentColor: Colors.blueGrey,
-      canvasColor: Colors.white,
-      focusColor: Colors.blueAccent,
-      disabledColor: Colors.grey,
-
-      backgroundColor: Colors.blueGrey.shade400,
-
-      appBarTheme: AppBarTheme(
-        // ignore: deprecated_member_use
-          brightness: Brightness.dark,
-          color: Colors.white,
-          elevation: 0,
-          iconTheme: IconThemeData(
-            // color: App.mainColor,
-          ),
-          // ignore: deprecated_member_use
-          textTheme: TextTheme(
-            // headline6: TextStyle(color: App.mainColor, fontSize: 18),
-          )),
-
-      fontFamily: 'Robot',
-
-      // Define the default TextTheme. Use this to specify the default
-      // text styling for headlines, titles, bodies of text, and more.
+  class Themes{
+    static final lightTheme = ThemeData(
+      scaffoldBackgroundColor: Colors.white,
+      focusColor: primary_color, // appbar icons
+      primaryColorDark: Colors.black, // for normal icon color
+      primaryColor: Colors.white,
       textTheme: TextTheme(
-        headline1:
-        TextStyle(fontSize: 64.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline2:
-        TextStyle(fontSize: 52.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline3:
-        TextStyle(fontSize: 48.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline4:
-        TextStyle(fontSize: 32.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline5:
-        TextStyle(fontSize: 28.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline6:
-        TextStyle(fontSize: 22.0, height: 1.5, fontWeight: FontWeight.w500),
-        subtitle1:
-        TextStyle(fontSize: 18.0, height: 1.5, color: Colors.black54),
-        subtitle2:
-        TextStyle(fontSize: 12.0, height: 1.5, color: Colors.black54),
-        button: TextStyle(fontSize: 16.0, height: 1.5, color: Colors.black54),
-        bodyText1: TextStyle(fontSize: 16.0, height: 1.5),
-        bodyText2: TextStyle(fontSize: 16.0, height: 1.5),
+        titleLarge: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+            fontWeight: FontWeight.w500
+        ),
+        labelMedium: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+          color: Colors.white70,
+        ),
+        labelSmall: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 14,),
+        labelLarge: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w800,
+          color: Colors.black,
+        ),
+        displaySmall: TextStyle( // for feed captions
+          fontSize: getFontSize(14),
+          fontWeight: FontWeight.normal,
+          color: Colors.grey[800],
+        ),
+        bodyMedium: TextStyle( /// used inside drawer
+            color: Colors.black, fontSize: 17, fontWeight: FontWeight.w700
+        ),
+        bodySmall: TextStyle( /// used inside drawer
+            color: Colors.black, fontSize: 13, fontWeight: FontWeight.w100
+        ),
       ),
-
-      buttonTheme: ButtonThemeData(
-        buttonColor: Colors.grey.shade200,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5))),
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-        textTheme: ButtonTextTheme.accent,
+      bottomAppBarTheme: BottomAppBarTheme(
+        color: primary_color,
       ),
-    )
-  };
+      iconTheme: IconThemeData(
+        color: primary_color,
+      ),
+      cardColor: primary_color,
+      cardTheme: CardTheme(
+        color: Colors.black,
+        shadowColor: Colors.white,
+      ),
+      dividerColor: Colors.grey,
+    );
 
-  static ThemeData? _currentTheme;
-
-  ThemesController(bool isLight) {
-    _currentTheme = appThemeData[isLight ? Themes.Light : Themes.Dark]!;
+    static final darkTheme = ThemeData(
+      scaffoldBackgroundColor: Colors.black,
+      primaryColorDark: Colors.white,
+      primaryColor: Colors.blueGrey,
+      focusColor: Colors.white, // appbar icons
+      cardColor: Colors.grey,
+      textTheme: TextTheme(
+        titleLarge: TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.w500
+        ),
+        displaySmall: TextStyle( // for feed captions
+          fontSize: getFontSize(14),
+          fontWeight: FontWeight.normal,
+          color: Colors.white70,
+        ),
+        labelMedium: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+          color: Colors.grey[900],
+        ),
+        labelLarge: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w900,
+          color: Colors.white,
+        ),
+        labelSmall: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14,
+          overflow: TextOverflow.ellipsis,
+        ),
+        bodyMedium: TextStyle( /// used inside drawer
+            color: Colors.white, fontSize: 17, fontWeight: FontWeight.w700
+        ),
+        bodySmall: TextStyle( /// used inside drawer
+            color: Colors.white, fontSize: 13, fontWeight: FontWeight.w100
+        ),
+      ),
+      drawerTheme: DrawerThemeData(
+        backgroundColor: Colors.black,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+      cardTheme: CardTheme(
+        color: Colors.black,
+      ),
+      dividerColor: Colors.grey,
+    );
   }
 
-  /// Use this method on UI to get selected theme.
-  static ThemeData get currentTheme {
-    if (_currentTheme == null) {
-      _currentTheme = appThemeData[Themes.Light];
+final themeNotifierProvider = StateNotifierProvider<ThemeProvider, ThemeMode?>((ref) {
+  return ThemeProvider();
+});
+
+  class ThemeProvider extends StateNotifier<ThemeMode?>{
+    ThemeProvider() : super(ThemeMode.system);
+    void changeTheme(bool isON){
+      state = isON ? ThemeMode.dark : ThemeMode.light;
     }
-    return _currentTheme!;
   }
-
-  /// Sets theme and notifies listeners about change.
-  setTheme(Themes theme) async {
-    _currentTheme = appThemeData[theme];
-
-    // Here we notify listeners that theme changed
-    // so UI have to be rebuild
-    // notifyListeners();
-  }
-}

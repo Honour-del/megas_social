@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:megas/core/utils/constants/consts.dart';
+import 'package:megas/core/utils/custom_widgets/app_bar.dart';
 
 
 import 'package:photo_view/photo_view.dart';
@@ -23,6 +24,7 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: appBar(context, "Photo view", false, true, widget: SizedBox.shrink(), color: Colors.black),
         body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -48,6 +50,8 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
       ),
     );
   }
+
+
 
   _getParticularImage() {
     switch (widget.imageProviderCategory) {

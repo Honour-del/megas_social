@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
 
 class EditForm extends StatelessWidget {
-  const EditForm({Key? key, required this.controller, required this.label, this.onChanged, this.validator}) : super(key: key);
+  const EditForm({Key? key, required this.controller, required this.label, this.onChanged, this.validator, this.keyboardType}) : super(key: key);
   final TextEditingController controller;
   final String label;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,8 @@ class EditForm extends StatelessWidget {
                 controller: controller,
                 onChanged: onChanged,
                 validator: validator,
+                keyboardType: keyboardType,
+                maxLines: 10,
               ),
             ),
           ],

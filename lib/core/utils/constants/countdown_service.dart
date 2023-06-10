@@ -1,10 +1,5 @@
 import 'dart:async';
-
-
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:megas/app_main.dart';
 import 'package:megas/core/entities/time_remaining.dart';
 
 final countDownProvider =
@@ -21,11 +16,7 @@ class CountDown extends StateNotifier<TimeRemaining> {
     int dif = eventDate.difference(DateTime.now()).inSeconds;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (dif < 0) {
-        debugPrint("event done");
-        KNotificationController.createNewNotification(
-          title: 'Event duration has elapsed',
-          body: 'Click now to check your schedule',
-        );
+        print("event done");
 
         timer.cancel();
       } else if (dif < 60) {

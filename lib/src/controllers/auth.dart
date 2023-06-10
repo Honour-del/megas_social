@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:megas/core/utils/constants/exceptions.dart';
-
 import '../services/auth/interface.dart';
 
 
@@ -22,18 +20,15 @@ class AuthController extends StateNotifier{
   FutureOr<Either<String, dynamic>> register({
     required String email,
     required String password,
-    // required String password2,
-    // required String phoneNumber,
     required String name,
-    // required String fcmToken,
-    // required String photoUrl,
-    // String? otpCode,
+    required photoUrl,
   }) async {
     try {
       dynamic status = await read.read(authServiceProvider).register(
         email: email,
         password: password,
         name: name,
+        url: photoUrl
       );
       return Right(status);
     } on FirebaseException catch (e) {
@@ -107,11 +102,37 @@ class AuthController extends StateNotifier{
 
 
   Future<bool?> resetPassword(
-      {String? otp, String? password, String? password2}) async {
+      {String? email, String? password, String? password2}) async {
     try {
       final passwordChanged = await read.read(authServiceProvider)
-          .resetPassword(otp: otp, password: password, password2: password2);
+          .resetPassword(email: email, password: password, password2: password2);
       return passwordChanged;
+    } on FirebaseException {
+      return false;
+    }
+  }
+
+  Future resendVerificationEmail(User user) async{
+    try {
+      final bool? resend = await read.read(authServiceProvider).resendVerificationEmail(user);
+      return resend;
+    } on FirebaseException {
+      return false;
+    }
+  }
+  Future<bool> verificationCheck(User user)async{
+    try {
+      final bool? verificationCheck = await read.read(authServiceProvider).verificationCheck(user);
+      return verificationCheck!;
+    } on FirebaseException {
+      return false;
+    }
+  }
+
+  Future<bool> checkVerification(User user)async{
+    try {
+      final bool? checkVerification = await read.read(authServiceProvider).checkVerification(user);
+      return checkVerification!;
     } on FirebaseException {
       return false;
     }

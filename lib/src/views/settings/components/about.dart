@@ -23,9 +23,13 @@ class _AboutScreenState extends State<AboutScreen> {
 
   String soc = 'Social' ;
 
-  Future<void> openUrl(String url, {bool forceWebView = false, bool enableJavaScript = false}) async{
-    if(await canLaunch(url)) {
-      await launch(url, forceWebView: forceWebView, enableJavaScript: enableJavaScript);
+  Future<void> openUrl(url, ) async{//{bool forceWebView = false, bool enableJavaScript = false}
+    if(await canLaunchUrl(url)) {
+      await launchUrl(url,
+          mode: LaunchMode.inAppWebView,
+          webViewConfiguration: WebViewConfiguration()
+          // forceWebView: forceWebView, enableJavaScript: enableJavaScript
+      );
     }
   }
 
@@ -39,10 +43,10 @@ class _AboutScreenState extends State<AboutScreen> {
             title: Text(twit, style: Theme
                 .of(context)
                 .textTheme
-                .subtitle1,),
+                .titleMedium,),
             leading: FaIcon(FontAwesomeIcons.twitter, size: 25,),
             onTap: () async{
-              await openUrl("twitter.com/basharsherifs?s=09", forceWebView: false, enableJavaScript: true);
+              await openUrl("https://twitter.com/alienutd",);
             },
           ),
           Divider(),
@@ -51,9 +55,9 @@ class _AboutScreenState extends State<AboutScreen> {
             title: Text(inst, style: Theme
                 .of(context)
                 .textTheme
-                .subtitle1,),
+                .titleMedium,),
             onTap: () async {
-              await openUrl("github.com/Honour-del/Pusheat-with-me");
+              await openUrl("https://www.instagram/olowobashar");
             },
           ),
           Divider(),
@@ -62,9 +66,9 @@ class _AboutScreenState extends State<AboutScreen> {
             title: Text(git, style: Theme
                 .of(context)
                 .textTheme
-                .subtitle1,),
+                .titleMedium,),
             onTap: () async {
-              await openUrl("github.com/Honour-del");
+              await openUrl("https://github.com/Honour-del");
             },
           ),
           Divider(),
@@ -85,25 +89,25 @@ class _AboutScreenState extends State<AboutScreen> {
             children: [
               ListTile(
                 leading: Icon(Icons.help,size: 25,),
-                title: Text("Help",style: Theme.of(context).textTheme.subtitle1,),
+                title: Text("Help",style: Theme.of(context).textTheme.titleMedium,),
                 subtitle: Text("Help and support center "),
                 onTap: () => push(context, Help()),
               ),
               HeaderWidget('Legal'),
               ListTile(
                 leading: Icon(Icons.security,size: 25,),
-                title: Text("Privacy and policy",style: Theme.of(context).textTheme.subtitle1,),
+                title: Text("Privacy and policy",style: Theme.of(context).textTheme.titleMedium,),
                 onTap: () => "go to chat settings",
               ),
               Divider(),
               ListTile(
                 leading: Icon(Icons.computer,size: 25,),
-                title: Text("Term or services",style: Theme.of(context).textTheme.subtitle1,),
+                title: Text("Term or services",style: Theme.of(context).textTheme.titleMedium,),
                 onTap: () => "go to chat settings",
               ),
               ListTile(
                 leading: Icon(Icons.note,size: 25,),
-                title: Text("Legal notices",style: Theme.of(context).textTheme.subtitle1,),
+                title: Text("Legal notices",style: Theme.of(context).textTheme.titleMedium,),
                 onTap: () => "go to chat settings",
               ),
               Divider(),

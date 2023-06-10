@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  awesome_notifications
+  audioplayers_linux
   emoji_picker_flutter
   objectbox_flutter_libs
   url_launcher_linux

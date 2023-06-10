@@ -9,9 +9,6 @@ import 'package:megas/src/views/settings/components/account_compos/change_passwo
 import 'package:megas/src/views/settings/components/account_compos/compos/event.dart';
 import 'package:megas/src/views/settings/components/account_compos/compos/edit_email.dart';
 import 'package:megas/src/views/settings/components/account_compos/compos/edit_phoneNumber.dart';
-import 'package:megas/src/views/settings/components/account_compos/compos/edit_username.dart';
-
-// import 'package:megas_chat/services/references.dart';
 
 class Account extends StatefulWidget {
 
@@ -62,15 +59,13 @@ class _AccountState extends State<Account> {
                   style: const TextStyle(
                       fontSize: 18,
                       // fontFamily: "MISTRAL",
-                      // fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w500,
                       color: Colors.black
                   ),
                 ),
 
-                SizedBox(width: getProportionateScreenWidth(58),),
-                InkWell(
-                    onTap: (){},
-                    child: IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.magnifyingGlass, color: primary_color))),
+                SizedBox(width: getProportionateScreenWidth(78),),
+                SizedBox.shrink()
                 // SizedBox(width: getProportionateScreenWidth(12),),
               ],
             ),
@@ -86,7 +81,7 @@ class _AccountState extends State<Account> {
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
-                  "Login and security", style: Theme.of(context).textTheme.headline6,
+                  "Login and security", style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -96,40 +91,35 @@ class _AccountState extends State<Account> {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text("Username",style: Theme.of(context).textTheme.subtitle1,),
-                      subtitle: Text("@"+"$userName"),
-                      onTap: () => push(context, UsernameSett()),
-                    ),
-                    Divider(),
-                    ListTile(
-                      title: Text("Phone",style:  Theme.of(context).textTheme.subtitle1,),
+                      title: Text("Phone",style:  Theme.of(context).textTheme.titleMedium,),
                       subtitle: Text("$phoneNumber",),
                       onTap: () => push(context, PhoneSetting()),
                     ),
                     Divider(),
                     ListTile(
-                      title: Text("Email",style:  Theme.of(context).textTheme.subtitle1,),
+                      title: Text("Email",style:  Theme.of(context).textTheme.titleMedium,),
                       subtitle: Text("$email",),
                       onTap: () => push(context, EmailSett()),
                     ),
                     Divider(),
                     ListTile(
-                      title: Text("Password",style:  Theme.of(context).textTheme.subtitle1,),
+                      title: Text("Password",style:  Theme.of(context).textTheme.titleMedium,),
                       subtitle: Text("*********"),
                       onTap: () => push(context, ChangePassword()),
                     ),
                     Divider(),
                     ListTile(
-                      title: Text("Event",style:  Theme.of(context).textTheme.subtitle1),
-                      subtitle: Text("You can set reminder and keep other important things here",style:  Theme.of(context).textTheme.bodyText2),
+                      title: Text("Event",style:  Theme.of(context).textTheme.titleMedium),
+                      subtitle: Text("You can set reminder and keep other important things here",style:  Theme.of(context).textTheme.bodyMedium),
                       onTap: () => push(context, Events()),
                     ),
                     Divider(),
                   ],
                 )
             ),
-            TextButton(onPressed: (){},
-                child: Text("Delete Account")),
+            SizedBox.shrink()
+            // TextButton(onPressed: (){},
+            //     child: Text("Delete Account")),
           ],
         ),
       ) : Center(child: kProgressIndicator,),

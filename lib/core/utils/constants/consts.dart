@@ -5,11 +5,109 @@
 // ios       1:33638021256:ios:74e5c3be3688360c29c73d
 // macos     1:33638021256:ios:74e5c3be3688360c29c73d
 
+// server key
+// AAAAB9T7eIg:APA91bFotrIsyxoJzFzTzmpX_L_o1Agl2h9Dm4Yu-vFwNup_xfSWbAclV4STkCzNgJkx5w9Od27krolfmfVRtYKhH2qIObb-NW9xwCNorDAlJQHOQKtKxHpmj5YZUPaWV98Ks08zIgqy
 
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
+import 'package:megas/core/utils/constants/uuid.dart';
+import 'package:megas/main.dart';
+import 'package:megas/src/services/notification/interface.dart';
+import 'package:timezone/timezone.dart' as tz;
+
+ /* a function to extract username from Full name */
+String getUsername({
+  required String id,
+  required String name,
+}){
+  String username = '';
+  if(name.length > 15){ // 15
+    name = name.substring(0, 6);
+  }
+  name = name.split(' ')[0];
+  id = id.substring(0, 4).toLowerCase();
+  username = '@$name$id';
+  return username;
+}
+
+scheduleNotification({
+  body,
+  time,
+}){
+  final id = uuid.hashCode;
+  // var flutterLocalNotificationsPlugin;
+  flutterLocalNotificationsPlugin?.zonedSchedule(
+    id,
+    "The time you set for your event's elapsed",
+    "$body",
+    tz.TZDateTime.from(time, tz.local),
+    NotificationDetails(
+      android: AndroidNotificationDetails(
+          0.toString(),
+          'Events notification',
+          priority: Priority.high,
+          importance: Importance.max,
+          // sound: ,
+          setAsGroupSummary: true,
+          styleInformation: DefaultStyleInformation(true, true),
+          largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+          channelShowBadge: true,
+          autoCancel: true,
+          icon: '@drawable/ic_launcher'
+      ),
+      iOS: DarwinNotificationDetails(),
+    ),
+    uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+    androidAllowWhileIdle: true,
+    payload: '',
+  );
+}
+
+scheduledDate(){
+
+}
+
+
+String? message;
+/// the description on the notification
+String? handleNotification(TypeN? type, username) {
+  switch (type) {
+    case TypeN.Likes:
+      message = '@$username likes your post';
+      break;
+    case TypeN.Comments:
+      message = '@$username commented on your post';
+      break;
+    case TypeN.Follower:
+      message = '@$username follows you';
+      break;
+    default:
+      message = 'This notification is from @$username';
+      break;
+  }
+  return null;
+}
+//
+//
+// extension ConvertNotification on String{
+//   TypeN toEnum() {
+//     switch (this) {
+//       case 'follow':
+//         return TypeN.Follower;
+//       case 'likes':
+//         return TypeN.Likes;
+//       case 'comment':
+//         return TypeN.Comments;
+//       default:
+//         return TypeN.Likes;
+//     }
+//   }
+// }
+
+
 
 class ErrorMessages{
   static String mapError(String error){
@@ -135,7 +233,6 @@ void showSnackBar(
     ),
   ));
 }
-
 
 enum StatusMediaTypes {
   TextActivity,

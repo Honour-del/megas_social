@@ -4,22 +4,19 @@ import 'package:megas/core/utils/constants/navigator.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
 import 'package:megas/core/utils/custom_widgets/buttons.dart';
 import 'package:megas/src/views/register/components/take_selfie/capture.dart';
-import 'package:megas/src/views/register/components/take_selfie/selfie_camera.dart';
-// import 'package:numbers/screens/sign_up/take_selfie/selfie_camera.dart';
-// import 'package:numbers/utils/sizeConfig.dart';
-// import 'package:numbers/widgets/buttons/default_button.dart';
-//
-// import '../../../utils/constants.dart';
 
 
 class TakeSelfie extends StatelessWidget {
+  final String name;
+  final String email;
+  final String password;
+  const TakeSelfie({required this.name, required this.email, required this.password});
   static final routeName = "/take_selfie";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
       child: Stack(children: [
-        // Image.asset("assets/images/background.png"),
         SingleChildScrollView(
             child: Container(
           child: Column(
@@ -83,14 +80,14 @@ class TakeSelfie extends StatelessWidget {
                     SizedBox(
                       height: getProportionateScreenHeight(50.0),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: getProportionateScreenWidth(40),
-                      ),
-                      child: FlatButton(
-                          label: "!Open Camera",
-                          onTap: () => push(context, FaceDetectorView())),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(
+                    //     horizontal: getProportionateScreenWidth(40),
+                    //   ),
+                    //   child: FlatButtonCustom(
+                    //       label: "!Open Camera",
+                    //       onTap: () => push(context, FaceDetectorView())),
+                    // ),
                     SizedBox(
                       height: getProportionateScreenHeight(30.0),
                     ),
@@ -98,9 +95,13 @@ class TakeSelfie extends StatelessWidget {
                       padding: EdgeInsets.symmetric(
                         horizontal: getProportionateScreenWidth(40),
                       ),
-                      child: FlatButton(
+                      child: FlatButtonCustom(
                           label: "Open Camera",
-                          onTap: () => push(context, CaptureImage())),
+                          onTap: () => push(context, CaptureImage(
+                            name: name,
+                            email: email,
+                            password: password,
+                          ))),
                     ),
                   ],
                 )

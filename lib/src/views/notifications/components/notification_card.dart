@@ -13,7 +13,8 @@ class NotificationCard extends StatefulWidget {
 class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
-    final timeAgo = timeago.format(widget.note.timeAt);
+    final timeAgo = timeago.format(widget.note.timeAt.toDate());
+    // final timeAgo = DateTime.fromMicrosecondsSinceEpoch(widget.note.timeAt as int);
     return GestureDetector(
       onTap: (){
         // push(context, ChatDetailPage(userName: '@alienwear',));
@@ -26,7 +27,7 @@ class _NotificationCardState extends State<NotificationCard> {
               child: Row(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: AssetImage(widget.note.avatarUrl),
+                    backgroundImage: NetworkImage(widget.note.avatarUrl),
                     maxRadius: 30,
                   ),
                   const SizedBox(width: 16,),
@@ -46,7 +47,7 @@ class _NotificationCardState extends State<NotificationCard> {
                 ],
               ),
             ),
-            Text(timeAgo,style: TextStyle(fontSize: 12,fontWeight: widget.note.isRead?FontWeight.bold:FontWeight.normal),),
+            Text(timeAgo.toString(),style: TextStyle(fontSize: 12,fontWeight: widget.note.isRead?FontWeight.bold:FontWeight.normal),),
           ],
         ),
       ),

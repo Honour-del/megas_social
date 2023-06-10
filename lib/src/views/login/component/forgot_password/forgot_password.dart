@@ -2,14 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/core/utils/constants/consts.dart';
-import 'package:megas/core/utils/constants/exceptions.dart';
 import 'package:megas/core/utils/constants/general_provider.dart';
 import 'package:megas/core/utils/constants/regex.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
 import 'package:megas/core/utils/custom_widgets/buttons.dart';
 import 'package:megas/core/utils/custom_widgets/text_fields.dart';
 import 'package:megas/src/controllers/auth.dart';
-import 'check_your_mail.dart';
+// import 'check_your_mail.dart';
 
 
 
@@ -26,6 +25,7 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
   bool progress = false;
   final TextEditingController _email = TextEditingController();
+  String error = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,37 +67,47 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
                 const SizedBox(height: 67,),
                 if(progress)
                   kProgressIndicator, //show loading if reset button is pressed
-                FlatButton(label: 'RESET PASSWORD',
+                FlatButtonCustom(label: 'RESET PASSWORD',
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      ref.read(loadingProvider.state)
-                          .state = true;
-                      setState(() {
-                        progress = true;
-                      });
-                      Map<String, dynamic>? response = await ref
-                          .read(authControllerProvider.notifier)
-                          .forgetPassword(_email.text)
-                          .catchError((e) {
-                        ref.read(loadingProvider.state)
-                            .state = false;
+                      try{
+                        ref.read(loadingProvider.notifier)
+                            .state = true;
                         setState(() {
-                          progress = false;
+                          progress = true;
                         });
-                        if (e is FirebaseAuthException) {
-                          showSnackBar(context, text: e.message!);
-                        } else {
+                        dynamic response = await ref
+                            .read(authControllerProvider.notifier)
+                            .resetPassword(email: _email.text.trim())
+                            .catchError((e) {
+                          ref.read(loadingProvider.notifier)
+                              .state = false;
                           setState(() {
                             progress = false;
                           });
-                          ref.read(loadingProvider.state)
-                              .state = false;
-                          showSnackBar(context, text: "Something is wrong!");
+                          if (e is FirebaseAuthException) {
+                            showSnackBar(context, text: e.message!);
+                          } else {
+                            setState(() {
+                              progress = false;
+                            });
+                            ref.read(loadingProvider.notifier)
+                                .state = false;
+                            showSnackBar(context, text: "Something is wrong!");
+                          }
+                        });
+                        if(response != null) {
+                          setState(() {
+                            progress = false;
+                          });
+                         showSnackBar(context, text: 'Email sent');
                         }
-                      });
-                      if(response != null) {
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => CheckYourMail(
-                            otp: '0000')), (route) => false);
+                      } catch (e){
+                        // Todo
+                        setState(() {
+                          progress = false;
+                        });
+                        showSnackBar(context, text: e.toString());
                       }
                     }
                   }
@@ -112,7 +122,7 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
                 ),
 
                 const Spacer(),
-                FlatButton(label: 'Back', onTap: (){
+                FlatButtonCustom(label: 'Back', onTap: (){
                   Navigator.pop(context);
                 }, ),
                 const SizedBox(height: 60,),

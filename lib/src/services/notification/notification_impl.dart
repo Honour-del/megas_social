@@ -1,42 +1,64 @@
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/core/references/firestore.dart';
+import 'package:megas/core/utils/constants/size_config.dart';
 import 'package:megas/src/models/notification.dart';
+import 'package:megas/src/services/auth/auths_impl.dart';
 import 'package:megas/src/services/notification/interface.dart';
 
 
-final streamNotification = StreamProvider.autoDispose<List<NotificationModel>>((ref) {
-  final notificationStream = notificationsRef.orderBy('time_at').snapshots()
+final streamNotification = StreamProvider<List<NotificationModel>>((ref) {
+  print('0');
+  final uid = ref.watch(authProviderK).value?.uid;
+  print('1');
+  final notificationStream = usersRef.doc(uid).collection('notifications').orderBy('time_at', descending: false).snapshots()
       .map((query) => query.docs
       .map((doc) => NotificationModel.fromJson(doc.data())).toList());
+  print('2');
   return notificationStream;
 });
 
 
 class NotificationServiceImpl implements NotificationService{
+  final String url = 'https://fcm.googleapis.com/fcm/send';
 
-  /// the description on the notification
-  String? handleNotification(Type? type, username) {
-    switch (type) {
-      case Type.Likes:
-        message = '@$username likes your post';
-        break;
-      case Type.Comments:
-        message = '@$username commented on your post';
-        break;
-      case Type.Follower:
-        message = '@$username follows you';
-        break;
-      default:
-        message = 'This notification is from @$username';
-        break;
+  @override
+  Future<void> sendFcmNotification({String? body, String? title, token}) async{
+    final Dio dio = Dio();
+    try{
+      dio.options.headers['Content-Type'] = 'application/json';
+      dio.options.headers['Authorization'] = 'key=$server_key';
+      final data = {
+        "to": token,
+        "notification": {
+          "title": title,
+          "body": body,
+        },
+        // "to": token,
+      };
+
+      final headers = {
+        'content-type': 'application/json',
+        'Authorization': 'key=$server_key',
+      };
+
+      final response = await dio.post(
+        url,
+        data: json.encode(data),
+        options: Options(headers: headers)
+      );
+
+      if(response.statusCode == 200)
+         print("Response = ${response.statusMessage}");
+    } on FirebaseException catch(e){
+      throw e;
     }
-    return null;
   }
 
-  String? message;
 
   StreamController stream = StreamController();
 
@@ -77,14 +99,13 @@ class NotificationServiceImpl implements NotificationService{
 
 
   @override
-  Future sendNotification({Map<String, dynamic>? toJson, userToReceiveNotificationId}) async{
+  Future sendNotification({Map<String, dynamic>? toJson, userToReceiveNotificationId, notificationId}) async{
     // TODO: implement sendNotification
     try{
-      // NotificationModel
       // notificationId = uuid.v1();
       print('about to send notification');
       // Map<String, dynamic>? toJson;
-      await usersRef.doc(userToReceiveNotificationId).collection('notifications').doc().set(toJson!);
+      await usersRef.doc(userToReceiveNotificationId).collection('notifications').doc(notificationId).set(toJson!);
       print('notification sent');
     }on FirebaseException catch(e){
       throw e;

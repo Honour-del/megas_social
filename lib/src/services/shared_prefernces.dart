@@ -7,10 +7,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Preferences {
+   Future<void> setTheme(String value, bool isDarkMode) async {
+    SharedPreferences _preferences = await SharedPreferences.getInstance();
+    await _preferences.setBool(value, isDarkMode);
+  }
+
+  Future<bool?> getTheme(value) async {
+    SharedPreferences _preferences = await SharedPreferences.getInstance();
+    bool? token = _preferences.getBool(value);
+    return token;
+  }
+
   /// set token
   Future<void> setToken(String value) async {
     SharedPreferences _preferences = await SharedPreferences.getInstance();
     await _preferences.setString("token", value);
+  }
+
+  Future<void> setTime(suggestion_time, int value) async {
+    SharedPreferences _preferences = await SharedPreferences.getInstance();
+    await _preferences.setInt(suggestion_time, value);
   }
 
   /// set email
@@ -31,6 +47,12 @@ class Preferences {
   Future<String?> getToken() async {
     SharedPreferences _preferences = await SharedPreferences.getInstance();
     String? token = _preferences.getString("token");
+    return token;
+  }
+
+  Future<int?> getTime(suggestion_time) async {
+    SharedPreferences _preferences = await SharedPreferences.getInstance();
+    int? token = _preferences.getInt(suggestion_time);
     return token;
   }
 

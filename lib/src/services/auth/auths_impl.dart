@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:megas/core/references/firestore.dart';
+import 'package:megas/core/utils/constants/consts.dart';
 import 'package:megas/main.dart';
 import 'package:megas/src/models/User.dart';
 import 'package:megas/src/services/auth/interface.dart';
@@ -12,25 +12,37 @@ import 'package:megas/src/services/posts/posts_impl.dart';
 import 'package:megas/src/services/shared_prefernces.dart';
 
 
-final authProviderK = FutureProvider<User?>((ref) async{
-  return FirebaseAuth.instance.authStateChanges().first;
+final authProviderK = StreamProvider<User?>((ref) {
+  final AuthServiceImpl _serviceImpl = AuthServiceImpl();
+  return _serviceImpl.authStateChange;
 });
+// final authProviderK = FutureProvider<User?>((ref) async{
+//   return FirebaseAuth.instance.authStateChanges().first;
+// });
 
 /* This returns the every details of the user from firebase */
-final userDetailProvider = FutureProvider<UserModel?>((ref) async{
+final userDetailProvider = StreamProvider<UserModel?>((ref) {
   String? uid = ref.watch(authProviderK).value?.uid;
-  // final uid = FirebaseAuth.instance.currentUser?.uid;
-  // this was returning type 'Null'  is not subtype of Map<String, dynamic>
-  final data = await usersRef.doc(uid!).get();
-  // if(data.exists)
+  final data = usersRef.doc(uid!).snapshots().map((event) => UserModel.fromJson(event.data() as Map<String, dynamic>));
   print('getting user details from the backend');
-   // data.data();
-  print('User details is parsed into json');
-  UserModel userData = UserModel.fromJson(data.data()!);
-  print('____${userData.username}____');
-  return userData;
+  return data;
 });
 
+
+
+// final userDetailProvider = FutureProvider<UserModel?>((ref) async{
+//   String? uid = ref.watch(authProviderK).value?.uid;
+//   // final uid = FirebaseAuth.instance.currentUser?.uid;
+//   // this was returning type 'Null'  is not subtype of Map<String, dynamic>
+//   final data = await usersRef.doc(uid!).get();
+//   // if(data.exists)
+//   print('getting user details from the backend');
+//   // data.data();
+//   print('User details is parsed into json');
+//   UserModel userData = UserModel.fromJson(data.data()!);
+//   print('____${userData.username}____');
+//   return userData;
+// });
 
 class AuthServiceImpl implements AuthService {
    final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -38,30 +50,31 @@ class AuthServiceImpl implements AuthService {
   String verificationId ='';
   String? userId;
 
-  // Stream<User?>
-  authStateChanges() => _auth.authStateChanges().listen((user) {
-    if(user != null){
-      userId = user.uid;
-    }else {
-      userId = null;
-    }
-  });
+  Stream<User?> get authStateChange => _auth.authStateChanges();
+  // authStateChanges() => _auth.authStateChanges().listen((user) {
+  //   if(user != null){
+  //     userId = user.uid;
+  //   }else {
+  //     userId = null;
+  //   }
+  // });
   // User? get currentUser => _auth.currentUser;
   User? currentUser;
 
    CreatePostImpl impl = CreatePostImpl();
   // dynamic my;
   @override
-  Future register({required String email, required String name, required String password}) async{
+  Future register({required String email, required String name, required String password, required url}) async{
     // TODO: implement register
     try{
-      print("start");
+       // final creator =
        await _auth.createUserWithEmailAndPassword(email: email, password: password);
        currentUser = _auth.currentUser;
       print("saving user info");
       print("save0");
       /* Save user info after a new user is created */
-      final data = await _saveUser(currentUser?.uid, name,);
+      // await creator.user?.sendEmailVerification();
+      final data = await _saveUser(currentUser?.uid, name, url, email);
       print("save1");
       return data;
     } catch (e){
@@ -72,22 +85,27 @@ class AuthServiceImpl implements AuthService {
 
 
   /* Save user info as soon as they successfully registered */
-  Future _saveUser(uid, name,) async{
+  Future _saveUser(uid, name, url, email) async{
     try{
       if(currentUser == null) return null;
       print('The error is here 1');
+      String download = await impl.uploadImage(file: url, uid: uid, directoryName: 'userProfile',);
+      // String? email = currentUser!.email;
+      // String username = '@${email.split('@')[0]}';
+      String username = await getUsername(id: currentUser!.uid, name: name);
       Map<String, dynamic> toJson() {
         final data = <String, dynamic>{};
         data['id'] = currentUser!.uid;
-        data['username'] = "@$name";
+        data['username'] = username;
         data['name'] = name;
-        data['email'] = currentUser!.email;
+        data['email'] = email;
         data['bio'] = 'Edit profile to update your bio';
-        data['avatar_url'] = currentUser?.photoURL ?? '';
+        data['avatar_url'] = download;
         data['followers_count'] = [];
         data['following_count'] = [];
         data['posts_count'] = [];
         data['created_at'] = dateTime;
+        data['fcm_token'] = '';
         return data;
       }
       /* [uid] of the reference is the id of the registered user */
@@ -184,9 +202,14 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<bool?> resetPassword({String? otp, String? password, String? password2}) {
+  Future<bool?> resetPassword({String? email, String? password, String? password2}) async{
     // TODO: implement resetPassword
-    throw UnimplementedError();
+    try{
+      await _auth.sendPasswordResetEmail(email: email!);
+      return true;
+    } on FirebaseAuthException catch (e){
+      throw e;
+    }
   }
 
   @override
@@ -205,6 +228,40 @@ class AuthServiceImpl implements AuthService {
       });
       return download;
     } on FirebaseException catch (e){
+      throw e;
+    }
+  }
+
+  @override
+  Future resendVerificationEmail(User user) async{
+    // TODO: implement verifyEmail
+    try{
+      await user.sendEmailVerification();
+    } on FirebaseAuthException catch(e){
+      throw e;
+    }
+  }
+
+  @override
+  Future<bool> verificationCheck(User user) async{
+    // TODO: implement verificationCheck
+    try{
+      await user.reload();
+      await user.getIdToken(true);
+      await user.reload();
+      var flag = user.emailVerified;
+      return flag;
+    } on FirebaseAuthException catch(e){
+      throw e;
+    }
+  }
+
+  @override
+  Future<bool> checkVerification(User user) async{
+    // TODO: implement checkVerification
+    try{
+      return user.emailVerified;
+    } on FirebaseAuthException catch(e){
       throw e;
     }
   }

@@ -15,7 +15,7 @@ abstract class ProfileService {
 
   factory ProfileService()=> ProfileServiceImpl();
 
-  Future<UserModel> getProfile(uid);
+  Stream<UserModel> getProfile(uid);
 
   Stream<List<PostModel>> getUserPosts({String? id});
 

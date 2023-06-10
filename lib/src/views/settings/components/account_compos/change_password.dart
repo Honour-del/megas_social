@@ -62,7 +62,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               const SizedBox(height: 70,),
 
 
-              FlatButton(label: 'UPDATE PASSWORD', onTap: (){
+              FlatButtonCustom(label: 'UPDATE PASSWORD', onTap: (){
                 if(_formKey.currentState!.validate()){
                   print('Validated');
                 }

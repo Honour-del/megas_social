@@ -45,10 +45,13 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
     price.addListener(_done);
     description.addListener(_done);
   }
+
   void _done(){
-    setState(() {
-      isEditing = (_image != null) && (name.text.isNotEmpty)  && (price.text.isNotEmpty) && (description.text.isNotEmpty);
-    });
+    if(mounted){
+      setState(() {
+        isEditing = (_image != null) && (name.text.isNotEmpty)  && (price.text.isNotEmpty) && (description.text.isNotEmpty);
+      });
+    }
   }
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +60,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
         toolbarHeight: 70,////80
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        iconTheme: IconThemeData(color: primary_color),
+        // iconTheme: IconThemeData(color: primary_color),
         // leading: Text('yes'),
         shadowColor: Colors.transparent,
         flexibleSpace: Center(
@@ -70,27 +73,21 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.arrowLeft, color: primary_color)),
+                IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Theme.of(context).focusColor)),
                 SizedBox(width: getProportionateScreenWidth(70),),
                 Text(
                   "Add Item",
-                  style: const TextStyle(
-                      fontSize: 18,
-                      // fontFamily: "MISTRAL",
-                      // fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
 
                 SizedBox(width: getProportionateScreenWidth(70),),
-                isEditing ?  InkWell( //if ((username.text.isEmpty) || ( website.text.isEmpty) || (bio.text.isEmpty))
+                isEditing ?  InkWell(
                   onTap: ()async{
                     setState(() {
                       loading = true;
                     });
                     String? uid = ref.read(authProviderK).value?.uid;
                     final catalogs = ref.read(catalogProvider(uid!).notifier);
-                    // String? uid = ref.read(authProviderK).value?.uid;
                     String id = uuid.v1();
                     print('about to start');
                     final i =  await impl.uploadImage(file: _image!, directoryName: 'catalog', fileName: 'catalog.jpg', uid: uid);
@@ -110,7 +107,7 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
                     });
                     popcontext(context);
                   },
-                  child: (loading) ? Text('Loading...',style: TextStyle(color: Colors.black),) : Text('Done',style: TextStyle(color: Colors.black),),
+                  child: (loading) ? Text('Loading...',style: TextStyle(color: Theme.of(context).primaryColorDark),) : Text('Done',style: TextStyle(color: Theme.of(context).primaryColorDark),),
                 ) : const SizedBox.shrink(),
               ],
             ),
@@ -175,11 +172,11 @@ class _AddItemsPageState extends ConsumerState<AddItemsPage> {
               EditForm(controller: price, label: "Price", onChanged: (value){
                 if(price.text.isNotEmpty) {
                 }
-              },),
+              }, keyboardType: TextInputType.number,),
               EditForm(controller: quantity, label: "Quantity", onChanged: (value){
                 if(quantity.text.isNotEmpty) {
                 }
-              },),
+              },keyboardType: TextInputType.number,),
               EditForm(controller: description, label: "Description", onChanged: (value){
                 if(description.text.isNotEmpty) {
 

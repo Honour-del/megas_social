@@ -15,170 +15,49 @@ import 'package:objectbox/objectbox.dart';
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'core/entities/entities.dart';
-import 'src/models/chat.dart';
-import 'src/models/message.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <ModelEntity>[
   ModelEntity(
-      id: const IdUid(1, 548400093042158208),
+      id: const IdUid(1, 7932391550014401356),
       name: 'Event',
-      lastPropertyId: const IdUid(7, 6506459622372237827),
+      lastPropertyId: const IdUid(7, 9051375273029534285),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 7514126543427270485),
+            id: const IdUid(1, 4239337425103546859),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 6137348036312698552),
+            id: const IdUid(2, 6195734790580574666),
             name: 'title',
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(3, 7333085526483254321),
+            id: const IdUid(3, 7707058708515518089),
             name: 'date',
             type: 10,
             flags: 0),
         ModelProperty(
-            id: const IdUid(4, 3417338438764764567),
+            id: const IdUid(4, 3580576152696760978),
             name: 'imagePath',
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(5, 6649210182794553436),
+            id: const IdUid(5, 5643038778403921181),
             name: 'repeat',
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(6, 8571954252569469802),
+            id: const IdUid(6, 2565263438901023825),
             name: 'note',
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(7, 6506459622372237827),
+            id: const IdUid(7, 9051375273029534285),
             name: 'song',
-            type: 9,
-            flags: 0)
-      ],
-      relations: <ModelRelation>[],
-      backlinks: <ModelBacklink>[]),
-  ModelEntity(
-      id: const IdUid(6, 6110913076922876904),
-      name: 'ChatWallPaper',
-      lastPropertyId: const IdUid(3, 8947521641789291228),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 830849552207497006),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 4806094947066722990),
-            name: 'image',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 8947521641789291228),
-            name: 'chatId',
-            type: 6,
-            flags: 0)
-      ],
-      relations: <ModelRelation>[],
-      backlinks: <ModelBacklink>[]),
-  ModelEntity(
-      id: const IdUid(7, 2152833418948979280),
-      name: 'LocalChat',
-      lastPropertyId: const IdUid(6, 5837088791650806019),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 2122380566709354815),
-            name: 'localId',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 4920012546054553771),
-            name: 'id',
-            type: 6,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 5518901580466373541),
-            name: 'userId',
-            type: 11,
-            flags: 520,
-            indexId: const IdUid(3, 250925596263190997),
-            relationTarget: 'UserModel'),
-        ModelProperty(
-            id: const IdUid(4, 8392812391913197421),
-            name: 'unreadMessages',
-            type: 6,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(5, 8837789285555572593),
-            name: 'lastMessage',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(6, 5837088791650806019),
-            name: 'lastMessageSendAt',
-            type: 10,
-            flags: 0)
-      ],
-      relations: <ModelRelation>[
-        ModelRelation(
-            id: const IdUid(1, 3260432197073210898),
-            name: 'messages',
-            targetId: const IdUid(8, 2252469042312509460))
-      ],
-      backlinks: <ModelBacklink>[]),
-  ModelEntity(
-      id: const IdUid(8, 2252469042312509460),
-      name: 'LocalMessage',
-      lastPropertyId: const IdUid(8, 707027306685530515),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 6010557758837914919),
-            name: 'localId',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 988172970030677356),
-            name: 'userName',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 3672908574245064972),
-            name: 'chatId',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(4, 15390577053505026),
-            name: 'message',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(5, 7228522885302552052),
-            name: 'actualMessage',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(6, 5572961055339740818),
-            name: 'sendAt',
-            type: 10,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(7, 7282250875731330664),
-            name: 'messageTypes',
-            type: 6,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(8, 707027306685530515),
-            name: 'messageDateLocal',
             type: 9,
             flags: 0)
       ],
@@ -206,50 +85,13 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(8, 2252469042312509460),
-      lastIndexId: const IdUid(3, 250925596263190997),
-      lastRelationId: const IdUid(1, 3260432197073210898),
+      lastEntityId: const IdUid(1, 7932391550014401356),
+      lastIndexId: const IdUid(0, 0),
+      lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
-      retiredEntityUids: const [
-        2732169838493984656,
-        3423537386836776943,
-        8342637267197489336,
-        2559829172288858671
-      ],
+      retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [
-        7377411748897134739,
-        7868235509732049711,
-        8956906107240476340,
-        7068986014485844844,
-        7374990415943477766,
-        8994486843315303621,
-        124068463030432399,
-        8840674799633709170,
-        3143904259089085415,
-        1487278185870966636,
-        208127556495922550,
-        4455293755967445344,
-        3758274295527686234,
-        2171403425402601293,
-        610161371835351694,
-        2311219770654698380,
-        3270567276537849484,
-        8421087663394741502,
-        4094993269866464190,
-        2417224854732664898,
-        5577250965761639234,
-        6537322283075253363,
-        4281021145914722754,
-        618628548301512351,
-        5239408602908459374,
-        8233886770415779389,
-        7635229071663237316,
-        407374068763198998,
-        8637450942640787280,
-        2523030671741061983,
-        4033627573687249409
-      ],
+      retiredPropertyUids: const [],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -307,149 +149,6 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGetNullable(buffer, rootOffset, 16));
 
           return object;
-        }),
-    ChatWallPaper: EntityDefinition<ChatWallPaper>(
-        model: _entities[1],
-        toOneRelations: (ChatWallPaper object) => [],
-        toManyRelations: (ChatWallPaper object) => {},
-        getId: (ChatWallPaper object) => object.id,
-        setId: (ChatWallPaper object, int id) {
-          object.id = id;
-        },
-        objectToFB: (ChatWallPaper object, fb.Builder fbb) {
-          final imageOffset =
-              object.image == null ? null : fbb.writeString(object.image!);
-          fbb.startTable(4);
-          fbb.addInt64(0, object.id ?? 0);
-          fbb.addOffset(1, imageOffset);
-          fbb.addInt64(2, object.chatId);
-          fbb.finish(fbb.endTable());
-          return object.id ?? 0;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-
-          final object = ChatWallPaper(
-              id: const fb.Int64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 4),
-              image: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 6),
-              chatId: const fb.Int64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 8));
-
-          return object;
-        }),
-    LocalChat: EntityDefinition<LocalChat>(
-        model: _entities[2],
-        toOneRelations: (LocalChat object) => [object.user],
-        toManyRelations: (LocalChat object) =>
-            {RelInfo<LocalChat>.toMany(1, object.localId!): object.messages},
-        getId: (LocalChat object) => object.localId,
-        setId: (LocalChat object, int id) {
-          object.localId = id;
-        },
-        objectToFB: (LocalChat object, fb.Builder fbb) {
-          final lastMessageOffset = object.lastMessage == null
-              ? null
-              : fbb.writeString(object.lastMessage!);
-          fbb.startTable(7);
-          fbb.addInt64(0, object.localId ?? 0);
-          fbb.addInt64(1, object.id);
-          fbb.addInt64(2, object.user.targetId);
-          fbb.addInt64(3, object.unreadMessages);
-          fbb.addOffset(4, lastMessageOffset);
-          fbb.addInt64(5, object.lastMessageSendAt?.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.localId ?? 0;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final lastMessageSendAtValue =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
-          final object = LocalChat(
-              localId: const fb.Int64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 4),
-              id: const fb.Int64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 6),
-              unreadMessages: const fb.Int64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 10),
-              lastMessage: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 12),
-              lastMessageSendAt: lastMessageSendAtValue == null
-                  ? null
-                  : DateTime.fromMillisecondsSinceEpoch(
-                      lastMessageSendAtValue));
-          object.user.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          object.user.attach(store);
-          InternalToManyAccess.setRelInfo(
-              object.messages,
-              store,
-              RelInfo<LocalChat>.toMany(1, object.localId!),
-              store.box<LocalChat>());
-          return object;
-        }),
-    LocalMessage: EntityDefinition<LocalMessage>(
-        model: _entities[3],
-        toOneRelations: (LocalMessage object) => [],
-        toManyRelations: (LocalMessage object) => {},
-        getId: (LocalMessage object) => object.localId,
-        setId: (LocalMessage object, int id) {
-          object.localId = id;
-        },
-        objectToFB: (LocalMessage object, fb.Builder fbb) {
-          final userNameOffset = object.userName == null
-              ? null
-              : fbb.writeString(object.userName!);
-          final chatIdOffset =
-              object.chatId == null ? null : fbb.writeString(object.chatId!);
-          final messageOffset =
-              object.message == null ? null : fbb.writeString(object.message!);
-          final actualMessageOffset = object.actualMessage == null
-              ? null
-              : fbb.writeString(object.actualMessage!);
-          final messageDateLocalOffset = object.messageDateLocal == null
-              ? null
-              : fbb.writeString(object.messageDateLocal!);
-          fbb.startTable(9);
-          fbb.addInt64(0, object.localId ?? 0);
-          fbb.addOffset(1, userNameOffset);
-          fbb.addOffset(2, chatIdOffset);
-          fbb.addOffset(3, messageOffset);
-          fbb.addOffset(4, actualMessageOffset);
-          fbb.addInt64(5, object.sendAt?.millisecondsSinceEpoch);
-          fbb.addInt64(6, object.messageTypes);
-          fbb.addOffset(7, messageDateLocalOffset);
-          fbb.finish(fbb.endTable());
-          return object.localId ?? 0;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final sendAtValue =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
-          final object = LocalMessage(
-              localId: const fb.Int64Reader()
-                  .vTableGetNullable(buffer, rootOffset, 4),
-              userName: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 6),
-              chatId: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 8),
-              message: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 10),
-              actualMessage: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 12),
-              sendAt: sendAtValue == null
-                  ? null
-                  : DateTime.fromMillisecondsSinceEpoch(sendAtValue),
-              messageDateLocal: const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 18))
-            ..messageTypes = const fb.Int64Reader()
-                .vTableGetNullable(buffer, rootOffset, 16);
-
-          return object;
         })
   };
 
@@ -479,84 +178,4 @@ class Event_ {
 
   /// see [Event.song]
   static final song = QueryStringProperty<Event>(_entities[0].properties[6]);
-}
-
-/// [ChatWallPaper] entity fields to define ObjectBox queries.
-class ChatWallPaper_ {
-  /// see [ChatWallPaper.id]
-  static final id =
-      QueryIntegerProperty<ChatWallPaper>(_entities[1].properties[0]);
-
-  /// see [ChatWallPaper.image]
-  static final image =
-      QueryStringProperty<ChatWallPaper>(_entities[1].properties[1]);
-
-  /// see [ChatWallPaper.chatId]
-  static final chatId =
-      QueryIntegerProperty<ChatWallPaper>(_entities[1].properties[2]);
-}
-
-/// [LocalChat] entity fields to define ObjectBox queries.
-class LocalChat_ {
-  /// see [LocalChat.localId]
-  static final localId =
-      QueryIntegerProperty<LocalChat>(_entities[2].properties[0]);
-
-  /// see [LocalChat.id]
-  static final id = QueryIntegerProperty<LocalChat>(_entities[2].properties[1]);
-
-  /// see [LocalChat.user]
-  // static final user =
-  //     QueryRelationToOne<LocalChat, UserModel>(_entities[2].properties[2]);
-
-  /// see [LocalChat.unreadMessages]
-  static final unreadMessages =
-      QueryIntegerProperty<LocalChat>(_entities[2].properties[3]);
-
-  /// see [LocalChat.lastMessage]
-  static final lastMessage =
-      QueryStringProperty<LocalChat>(_entities[2].properties[4]);
-
-  /// see [LocalChat.lastMessageSendAt]
-  static final lastMessageSendAt =
-      QueryIntegerProperty<LocalChat>(_entities[2].properties[5]);
-
-  /// see [LocalChat.messages]
-  static final messages =
-      QueryRelationToMany<LocalChat, LocalMessage>(_entities[2].relations[0]);
-}
-
-/// [LocalMessage] entity fields to define ObjectBox queries.
-class LocalMessage_ {
-  /// see [LocalMessage.localId]
-  static final localId =
-      QueryIntegerProperty<LocalMessage>(_entities[3].properties[0]);
-
-  /// see [LocalMessage.userName]
-  static final userName =
-      QueryStringProperty<LocalMessage>(_entities[3].properties[1]);
-
-  /// see [LocalMessage.chatId]
-  static final chatId =
-      QueryStringProperty<LocalMessage>(_entities[3].properties[2]);
-
-  /// see [LocalMessage.message]
-  static final message =
-      QueryStringProperty<LocalMessage>(_entities[3].properties[3]);
-
-  /// see [LocalMessage.actualMessage]
-  static final actualMessage =
-      QueryStringProperty<LocalMessage>(_entities[3].properties[4]);
-
-  /// see [LocalMessage.sendAt]
-  static final sendAt =
-      QueryIntegerProperty<LocalMessage>(_entities[3].properties[5]);
-
-  /// see [LocalMessage.messageTypes]
-  static final messageTypes =
-      QueryIntegerProperty<LocalMessage>(_entities[3].properties[6]);
-
-  /// see [LocalMessage.messageDateLocal]
-  static final messageDateLocal =
-      QueryStringProperty<LocalMessage>(_entities[3].properties[7]);
 }

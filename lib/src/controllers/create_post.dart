@@ -9,20 +9,11 @@ StateNotifierProvider<CreatePostController, dynamic>(
         (ref) => CreatePostController(ref: ref));
 
 
-// final createPostProvider =
-// StateNotifierProvider.autoDispose.family<CreatePostController, dynamic, String>((ref, id) {
-//
-//   return CreatePostController(ref: ref, uid: id);
-// });
-
 class CreatePostController extends StateNotifier{
   final Ref? ref;
   CreatePostController({
       required this.ref
   }) : super(null);
-
-  // String? get  uidk => ref?.watch(authProviderK).value?.uid;
-  // UserModel? get  user => ref?.watch(userDetailProvider).value;
 
   // Posts without image
   Future<void> uploadTextPost({
@@ -34,7 +25,6 @@ class CreatePostController extends StateNotifier{
 }) async{
     try {
       await ref?.read(createpostServiceProvider).uploadTextPost(uid: uid, caption: caption, username: username, name: name, avatarUrl: avatarUrl,);
-      // return trending;
     } on FirebaseException catch (e, _) {
       print(e.message);
       rethrow;
@@ -52,7 +42,6 @@ class CreatePostController extends StateNotifier{
 }) async {
     try {
       await ref?.read(createpostServiceProvider).uploadPost(uid: uid, caption: caption, url: url, username: username, name: name, avatarUrl: avatarUrl,);
-      // return trending;
     } on FirebaseException catch (e, _) {
       print(e.message);
       rethrow;
@@ -64,7 +53,6 @@ class CreatePostController extends StateNotifier{
   }) async {
     try {
       await ref?.read(createpostServiceProvider).uploadImage(file: file);
-      // return trending;
     } on FirebaseException catch (e, _) {
       rethrow;
     }

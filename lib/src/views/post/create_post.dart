@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:megas/core/utils/constants/color_to_hex.dart';
 import 'package:megas/core/utils/constants/consts.dart';
 import 'package:megas/core/utils/constants/navigator.dart';
+import 'package:megas/core/utils/constants/regex.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
 import 'package:megas/core/utils/custom_widgets/alert_dialog.dart';
 import 'package:megas/src/controllers/create_post.dart';
@@ -83,7 +84,7 @@ class _MakePostState extends ConsumerState<MakePost> {
                       borderRadius: BorderRadius.circular(6),
                       // color: color ?? primary_color,
                       border: Border.all(
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColorDark,
                         width: 2,
                       )
                   ),
@@ -94,9 +95,6 @@ class _MakePostState extends ConsumerState<MakePost> {
                         width: 15,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          // border: Border(
-                          //
-                          // ),
                         ),
                       )),
                 ),
@@ -108,11 +106,7 @@ class _MakePostState extends ConsumerState<MakePost> {
                 alignment: Alignment.topCenter,
                 child: Text(
                   label!,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             ],
@@ -133,6 +127,7 @@ class _MakePostState extends ConsumerState<MakePost> {
                       borderSide: BorderSide(color: Colors.black)
                   ),
                   hintText: "Whats on your mind?",
+                  hintStyle: TextStyle(color: Theme.of(context).primaryColorDark)
                 ),
                 controller: posts,
                 onChanged: (value){
@@ -195,9 +190,7 @@ class _MakePostState extends ConsumerState<MakePost> {
             Center(
               child: Padding(
                 padding: EdgeInsets.only(bottom: 8),
-                child: CircularProgressIndicator(
-                  color: primary_color,
-                ),
+                child: kProgressIndicator,
               ),
             ),
         ],
@@ -209,7 +202,7 @@ class _MakePostState extends ConsumerState<MakePost> {
         toolbarHeight: 70,////80
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        iconTheme: IconThemeData(color: primary_color),
+        // iconTheme: IconThemeData(color: primary_color),
         shadowColor: Colors.transparent,
         flexibleSpace: Center(
           child: Padding(
@@ -223,15 +216,11 @@ class _MakePostState extends ConsumerState<MakePost> {
               children: [
                 IconButton(onPressed: (){
                   popcontext(context);
-                }, icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Colors.black)),
+                }, icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Theme.of(context).primaryColorDark)),
                 SizedBox(width: getProportionateScreenWidth(80),),
                 Text(
                   "Post",
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
 
                 SizedBox(width: getProportionateScreenWidth(80),),
@@ -271,7 +260,7 @@ class _MakePostState extends ConsumerState<MakePost> {
                     showSnackBar(context, text: "Post successfully uploaded");
                     popcontext(context);
                   /// done
-                } : null, icon: FaIcon(Icons.send, color: isActivated ? Colors.black : Colors.grey) ),
+                } : null, icon: FaIcon(Icons.send, color: isActivated ? Theme.of(context).primaryColorDark : Colors.grey) ),
               ],
             ),
           ),

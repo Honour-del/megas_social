@@ -28,7 +28,7 @@ class Body extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "You haven’t added any events yet",
+                        'You haven’t added any events yet \nNote: events will disappear an hour after the expiry time',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 24.sp,

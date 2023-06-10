@@ -2,18 +2,16 @@
 
 import 'dart:io';
 // import 'package:image/image.dart' as ImD;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:megas/core/references/firestore.dart';
+import 'package:megas/core/utils/constants/images.dart';
 import 'package:megas/core/utils/constants/uuid.dart';
 import 'package:megas/main.dart';
-import 'package:megas/src/models/post.dart';
 import 'package:megas/src/services/posts/interface.dart';
 
 
 class CreatePostImpl implements CreatePost{
-
-  // String currentUid = '';
 
   /* Can upload both images and videos */
   @override
@@ -21,20 +19,12 @@ class CreatePostImpl implements CreatePost{
     directoryName, uid, fileName
   }) async{
     try{
+      final _file = await compressImage(file);
+      debugPrint('$_file is successfully compressed');
       final String imageFileName = '$directoryName/$uid/${DateTime.now().microsecondsSinceEpoch}_$fileName';
-      // final ext = file.path.split('.').last;
       final _storage = storageRef.child(imageFileName);
-      // storageRef.child('uploads/${ext}');
 
-      // final tDirectory = await getTemporaryDirectory();
-      // final path = tDirectory.path;
-      // ImD.Image? nImageFile = ImD.decodeImage(file.readAsBytesSync());
-      // final compressedImageFile = File('$path/img_$postId.jpg')
-      //   ..writeAsBytesSync(ImD.encodeJpg(nImageFile!, quality: 75));//this can be increased and decreased later
-      // // setState(() {                                                // it depends on the space of the cloud use bvy the app
-      // file = compressedImageFile;
-
-      UploadTask uploadTask = _storage.putFile(file);
+      UploadTask uploadTask = _storage.putFile(_file);
 
       TaskSnapshot taskSnapshot = await uploadTask;
 
@@ -88,50 +78,19 @@ class CreatePostImpl implements CreatePost{
         return data;
       }
       // await usersRef.doc(uid).collection('posts').add(toJson());
-      await postsRef.doc().set(toJson());
+      await postsRef.doc(postId).set(toJson());
     } on FirebaseException catch (e){
       throw e;
     }
   }
-
-
-  /* get all "User's" posts back from database */
-   getPosts(uid) async{
-    /* Return a stream of posts where the author is the currentUser */
-     final res = await usersRef.doc(uid).collection('posts').get();
-     Map<String, dynamic> map = {};
-     List<PostModel> results = [];
-     print('declared postModel');
-     // if(res.docs.isNotEmpty){
-       res.docs.forEach((element) {
-         map =  element.data();
-         print('getting users post3');
-         final res = PostModel.fromJson(map);
-         // return res.map((e) => PostModel.fromJson(e)).toList();
-         print('added result to model');
-         return results.add(res);
-       });
-     // }
-     return map;
-  }
-
-  void listenToCurrentUserPost(uid) {
-    Stream<QuerySnapshot> currentUserPostStream = getPosts(uid);
-    currentUserPostStream.listen((QuerySnapshot event) {
-      event.docs.forEach((e) {
-        final data = e.data();
-        // return data![''];
-      });
-    });
-  }
-
 
   /* delete a specific post */
   @override
   Future<bool> deletePost({required String uId, required String postId}) async{
     // TODO: implement deletePost
     try{
-      await usersRef.doc(uId).collection('posts').doc(postId).delete();
+      // await usersRef.doc(uId).collection('posts').doc(postId).delete();
+      await postsRef.doc(postId).delete();
       return true;
     } catch (e){
       throw e;
@@ -157,6 +116,6 @@ class CreatePostImpl implements CreatePost{
       return data;
     }
     // await usersRef.doc(uid).collection('posts').add(toJson());
-    await postsRef.doc().set(toJson());
+    await postsRef.doc(postId).set(toJson());
   }
 }

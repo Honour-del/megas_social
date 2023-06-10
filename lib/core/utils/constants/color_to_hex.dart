@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 //// light purple
 final HexColor primary_color = HexColor('#7B7FEC');
 final HexColor secondary_color = HexColor('#B4AEAE');

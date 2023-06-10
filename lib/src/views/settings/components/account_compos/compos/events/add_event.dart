@@ -13,7 +13,6 @@ import 'package:megas/core/entities/entities.dart';
 import 'package:megas/core/utils/constants/consts.dart';
 import 'package:megas/core/utils/constants/navigator.dart';
 import 'package:megas/core/utils/constants/regex.dart';
-// import 'package:megas/core/utils/constants/navigator.dart';
 import 'package:megas/src/services/events_repository.dart';
 
 class AddEvent extends ConsumerStatefulWidget {
@@ -223,6 +222,7 @@ class _AddEventState extends ConsumerState<AddEvent> {
                       date: selectedDate!, note: note.text,
                       imagePath: _image!.path));
                   print("Printed event: ${events.toString()}");
+                  scheduleNotification(body: '${title.text}', time: selectedDate);
                   setState(() {
                     loading = false;
                     popcontext(context);
@@ -258,6 +258,8 @@ class _AddEventState extends ConsumerState<AddEvent> {
       ),
     );
   }
+
+
 
   Future _getImage(ImageSource source) async {
     try {

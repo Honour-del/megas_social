@@ -90,12 +90,13 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                     ),
                     const SizedBox(height: 10,),
                     Center(child: Padding(
-                      padding: const EdgeInsets.only(left: 6, right: 6),
+                      padding: const EdgeInsets.only(left: 6, right: 6, bottom: 5),
                       child: Text(description,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,
+                          fontWeight: FontWeight.w700
                         ),
                       ),
                     ),
@@ -176,11 +177,11 @@ class _OnBoardingViewState extends State<OnBoardingView> {
         children: [
           buildPage(
             imageUrl: onboard1,
-            description: "Welcome to megas is a social media platform",
+            description: "Welcome to megas",
           ),
           buildPage(
             imageUrl: onboard2,
-            description: "Meet and interact with other traders all over world",
+            description: "Meet and interact with people all\nover the world",
           ),
           buildPage(
               imageUrl: onboard3,

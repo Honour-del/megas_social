@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:megas/core/utils/constants/color_to_hex.dart';
 import 'package:megas/core/utils/constants/size_config.dart';
 
-class FlatButton extends StatelessWidget {
-  const FlatButton({Key? key, required this.onTap, required this.label, this.width, this.color, this.textColor}) : super(key: key);
+class FlatButtonCustom extends StatelessWidget {
+  const FlatButtonCustom({Key? key, required this.onTap, required this.label, this.width, this.color, this.textColor}) : super(key: key);
   
   final VoidCallback onTap;
   final String label;

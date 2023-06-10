@@ -35,4 +35,19 @@ class SearchImpl implements Search{
       throw e;
     }
   }
+
+  @override
+  Stream<List<UserModel>> searchUser(String query) {
+    return usersRef.where('username', isGreaterThanOrEqualTo: query)
+    .where('username', isLessThan: query + 'z') // TODO: to filter the users based on 'query'
+        .snapshots().map((event) {
+      List<UserModel> _users = [];
+      for(var _user in event.docs){
+        _users.add(UserModel.fromJson(_user.data()));
+        print("Does the user exists?: {_user.exists}");
+      }
+      print('done with users list');
+      return _users;
+    });
+  }
 }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class CommentModel {
   CommentModel({
     required this.commenterUserId,
@@ -14,7 +16,7 @@ class CommentModel {
   late final String commenterUserId;
   late String? postId;
   late String? comment;
-  late String? commentCreatedAt;
+  late Timestamp? commentCreatedAt;
   late final String commentId;
   late String? username;
   late String? name;
@@ -50,11 +52,4 @@ class CommentModel {
     return CommentModel.fromJson(data);
     //// use this to get json data
   }
-}
-
-
-class LikesModel
-{
-  late final postId;
-
 }
